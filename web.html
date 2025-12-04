@@ -21,7 +21,7 @@
             color: #173a9a; /* Darker text for active link */
             font-weight: 600;
         }
-        /* Custom scrollbar for the documentation sidebar */
+        /* Custom scrollbar for the documentation sidebar on desktop */
         #doc-sidebar::-webkit-scrollbar {
             width: 4px;
         }
@@ -32,32 +32,56 @@
         #doc-sidebar::-webkit-scrollbar-track {
             background: #f1f5f9;
         }
+        /* Style for active doc links updated by Scrollspy */
+        .doc-active-link {
+            font-weight: 700;
+            color: #1d4ed8; /* Blue-700 for active doc link */
+        }
+
+        /* --- FIX for Sticky Header: CSS Scroll Margin --- */
+        /* Applies a top margin to the scroll target to reserve space for the fixed header */
+        .doc-section {
+            scroll-margin-top: 6rem; /* 96px, robustly covers the sticky header */
+        }
     </style>
 </head>
 <body>
 
     <!-- Main Navigation Bar (Sticky at the top) -->
-    <header class="sticky top-0 z-50 bg-white shadow-md">
+    <header class="sticky top-0 z-50 bg-white shadow-md" id="main-header">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-4">
-            <!-- Logo/Tool Name -->
-            <a href="#home" class="text-2xl font-bold text-gray-800 tracking-tight">
-                CU<span class="text-blue-600">EDA</span>
-            </a>
             
-            <!-- Navigation Links -->
+            <!-- Left Side: Logo and Small Button -->
+            <div class="flex items-center space-x-4">
+                <!-- Logo/Tool Name -->
+                <a href="#home" class="text-2xl font-bold text-gray-800 tracking-tight">
+                    CU<span class="text-blue-600">EDA</span>
+                </a>
+                
+                <!-- Small Run Tool Button -->
+                <a href="#" class="text-white bg-blue-600 hover:bg-blue-700 text-sm font-semibold py-1 px-3 rounded-md shadow-sm transition duration-150">
+                    Run Tool
+                </a>
+            </div>
+            
+            <!-- Right Side: Navigation Links (Introduction and Documentation) -->
             <div class="flex space-x-6 text-lg">
-                <a href="#home" id="nav-home" class="nav-link text-gray-600 hover:text-blue-600 transition duration-150 py-1 active-link" onclick="showSection('home', this)">
+                <!-- IMPORTANT FIX: Passing the event object and preventing default hash behavior -->
+                <a href="#home" id="nav-home" class="nav-link text-gray-600 hover:text-blue-600 transition duration-150 py-1 active-link" onclick="showSection(event, 'home', this)">
                     Introduction
                 </a>
-                <a href="#docs" id="nav-docs" class="nav-link text-gray-600 hover:text-blue-600 transition duration-150 py-1" onclick="showSection('docs', this)">
+                <a href="#docs" id="nav-docs" class="nav-link text-gray-600 hover:text-blue-600 transition duration-150 py-1" onclick="showSection(event, 'docs', this)">
                     Documentation
-                </a>
-                <a href="#" class="text-white bg-blue-500 hover:bg-blue-700 font-medium py-1.5 px-4 rounded-lg shadow-md transition duration-150">
-                    Run Tool
                 </a>
             </div>
         </nav>
     </header>
+    
+    <!-- Mobile Toggle Button for Documentation Sidebar (Fixed, Upper Left, Translucent) -->
+    <button id="doc-toggle-btn" class="lg:hidden inline-flex fixed top-20 left-4 z-40 bg-blue-600 text-white font-medium text-sm py-1.5 px-3 rounded-md opacity-75 hover:opacity-100 transition duration-150 shadow-lg items-center space-x-2 hidden" onclick="openDocDrawer()">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
+        <span>Table of Contents</span>
+    </button>
 
     <!-- Main Content Container -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -72,7 +96,8 @@
                     <p class="text-xl text-gray-600 mb-8">
                         Build a chip in <span class="text-blue-800">1 hour </span>
                     </p>
-                    <a href="#docs" class="inline-block bg-indigo-600 text-white text-xl font-semibold py-3 px-8 rounded-full hover:bg-indigo-700 transition duration-300 shadow-xl transform hover:scale-105" onclick="showSection('docs', document.getElementById('nav-docs'))">
+                    <!-- IMPORTANT FIX: Passing the event object and preventing default hash behavior -->
+                    <a href="#docs" class="inline-block bg-indigo-600 text-white text-xl font-semibold py-3 px-8 rounded-full hover:bg-indigo-700 transition duration-300 shadow-xl transform hover:scale-105" onclick="showSection(event, 'docs', document.getElementById('nav-docs'))">
                         Get Started Now
                     </a>
                 </div>
@@ -114,31 +139,72 @@
 
         <!-- 2. Documentation/Getting Started Section -->
         <section id="docs" class="content-section hidden">
-            <div class="flex flex-col lg:flex-row gap-8">
-                
-                <!-- Left Sidebar Navigation -->
-                <aside class="w-full lg:w-1/4 sticky top-20 h-96 overflow-y-auto pr-4" id="doc-sidebar">
-                    <nav class="space-y-2">
-                        <h4 class="text-lg font-semibold text-gray-800 mb-3">Table of Contents</h4>
-                        <a href="#doc-overview" class="block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm font-medium" onclick="setActiveDocLink(this)">
+            
+            <!-- MOBILE DRAWER CONTAINER (Hidden by default, fixed position on open) -->
+            <div id="mobile-doc-drawer" class="fixed inset-0 z-50 lg:hidden pointer-events-none transition-opacity duration-300 opacity-0">
+                <!-- Overlay (Clickable to close) -->
+                <div id="doc-overlay" class="absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300" onclick="closeDocDrawer()"></div>
+
+                <!-- Drawer Menu (Sliding panel) -->
+                <aside id="doc-sidebar-mobile" class="absolute left-0 top-0 h-full w-72 bg-white p-6 shadow-2xl transform -translate-x-full transition-transform duration-300">
+                    <button onclick="closeDocDrawer()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800">
+                        <!-- Close X icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                    <!-- Nav Content for Mobile -->
+                    <nav class="space-y-2 pt-6 overflow-y-auto h-full pr-2" id="doc-sidebar-mobile-nav">
+                        <h4 class="text-xl font-bold text-gray-800 mb-3 border-b pb-2">Table of Contents</h4>
+                        <a href="#doc-overview" class="doc-nav-link block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm font-medium" onclick="setActiveDocLink(this, true)">
                             1. Overview
                         </a>
-                        <a href="#doc-installation" class="block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this)">
+                        <a href="#doc-installation" class="doc-nav-link block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this, true)">
                             2. Installation & Setup
                         </a>
-                        <a href="#doc-data-prep" class="block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this)">
+                        <a href="#doc-data-prep" class="doc-nav-link block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this, true)">
                             3. Data Preparation
                         </a>
-                        <a href="#doc-running" class="block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this)">
+                        <a href="#doc-running" class="doc-nav-link block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this, true)">
                             4. Running an Analysis
                         </a>
-                        <a href="#doc-output" class="block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this)">
+                        <a href="#doc-output" class="doc-nav-link block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this, true)">
                             5. Interpreting Output
                         </a>
-                        <a href="#doc-advanced" class="block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this)">
+                        <a href="#doc-advanced" class="doc-nav-link block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this, true)">
                             6. Advanced Features
                         </a>
-                        <a href="#doc-troubleshoot" class="block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this)">
+                        <a href="#doc-troubleshoot" class="doc-nav-link block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this, true)">
+                            7. Troubleshooting
+                        </a>
+                    </nav>
+                </aside>
+            </div>
+
+            <!-- Main Flex Container for Desktop Layout -->
+            <div class="flex flex-col lg:flex-row gap-8">
+                
+                <!-- Left Sidebar Navigation (DESKTOP ONLY - Fixed position) -->
+                <aside class="w-full lg:w-1/4 sticky lg:top-20 lg:h-96 lg:overflow-y-auto lg:pr-4 hidden lg:block bg-white p-6 rounded-xl shadow-lg border border-gray-100" id="doc-sidebar">
+                    <nav class="space-y-2">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-3 border-b pb-2">Table of Contents</h4>
+                        <a href="#doc-overview" class="doc-nav-link block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm font-medium" onclick="setActiveDocLink(this)">
+                            1. Overview
+                        </a>
+                        <a href="#doc-installation" class="doc-nav-link block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this)">
+                            2. Installation & Setup
+                        </a>
+                        <a href="#doc-data-prep" class="doc-nav-link block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this)">
+                            3. Data Preparation
+                        </a>
+                        <a href="#doc-running" class="doc-nav-link block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this)">
+                            4. Running an Analysis
+                        </a>
+                        <a href="#doc-output" class="doc-nav-link block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this)">
+                            5. Interpreting Output
+                        </a>
+                        <a href="#doc-advanced" class="doc-nav-link block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this)">
+                            6. Advanced Features
+                        </a>
+                        <a href="#doc-troubleshoot" class="doc-nav-link block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this)">
                             7. Troubleshooting
                         </a>
                     </nav>
@@ -149,7 +215,7 @@
                     <h2 class="text-3xl font-bold text-gray-900 mb-6 border-b pb-2">Getting Started & Documentation</h2>
 
                     <!-- 1. Overview -->
-                    <section id="doc-overview" class="mb-10">
+                    <section id="doc-overview" class="mb-10 doc-section">
                         <h3 class="text-2xl font-semibold text-blue-700 mb-3 pt-6">1. Overview</h3>
                         <p class="text-gray-700 leading-relaxed mb-4">
                             ToolName is designed to be the fastest way to gain actionable insights from large, messy datasets. It uses proprietary algorithms to clean, normalize, and analyze data for common patterns in scientific research and business intelligence. Our goal is to reduce data processing time by 80%.
@@ -160,7 +226,7 @@
                     </section>
 
                     <!-- 2. Installation & Setup -->
-                    <section id="doc-installation" class="mb-10">
+                    <section id="doc-installation" class="mb-10 doc-section">
                         <h3 class="text-2xl font-semibold text-blue-700 mb-3 pt-6">2. Installation & Setup</h3>
                         <p class="text-gray-700 leading-relaxed mb-4">
                             ToolName is a web-based application, requiring no local installation. Simply navigate to the <a href="#" class="text-indigo-600 hover:underline font-medium">Run Tool</a> page to begin.
@@ -174,7 +240,7 @@
                     </section>
 
                     <!-- 3. Data Preparation -->
-                    <section id="doc-data-prep" class="mb-10">
+                    <section id="doc-data-prep" class="mb-10 doc-section">
                         <h3 class="text-2xl font-semibold text-blue-700 mb-3 pt-6">3. Data Preparation</h3>
                         <p class="text-gray-700 leading-relaxed mb-4">
                             For optimal results, ensure your input file adheres to the following structure.
@@ -185,7 +251,7 @@
                     </section>
                     
                     <!-- 4. Running an Analysis -->
-                    <section id="doc-running" class="mb-10">
+                    <section id="doc-running" class="mb-10 doc-section">
                         <h3 class="text-2xl font-semibold text-blue-700 mb-3 pt-6">4. Running an Analysis</h3>
                         <ol class="list-decimal list-inside space-y-2 text-gray-700 ml-4">
                             <li>Click the "Upload Data" button.</li>
@@ -196,7 +262,7 @@
                     </section>
 
                     <!-- 5. Interpreting Output -->
-                    <section id="doc-output" class="mb-10">
+                    <section id="doc-output" class="mb-10 doc-section">
                         <h3 class="text-2xl font-semibold text-blue-700 mb-3 pt-6">5. Interpreting Output</h3>
                         <p class="text-gray-700 leading-relaxed">
                             The output panel provides a summary of key metrics (p-values, R-squared) and a suite of interactive visualizations. Pay special attention to the *Confidence Score* which indicates data quality.
@@ -204,15 +270,15 @@
                     </section>
 
                     <!-- 6. Advanced Features -->
-                    <section id="doc-advanced" class="mb-10">
+                    <section id="doc-advanced" class="mb-10 doc-section">
                         <h3 class="text-2xl font-semibold text-blue-700 mb-3 pt-6">6. Advanced Features</h3>
-                        <p class="text-gray-700 leading-relaxed">
+                        <p class="text-700 leading-relaxed">
                             Explore the **Model Tuning** section to adjust hyperparameters for niche applications. You can also export custom R-scripts used in the backend for full reproducibility.
                         </p>
                     </section>
 
                     <!-- 7. Troubleshooting -->
-                    <section id="doc-troubleshoot" class="mb-10">
+                    <section id="doc-troubleshoot" class="mb-10 doc-section">
                         <h3 class="text-2xl font-semibold text-blue-700 mb-3 pt-6">7. Troubleshooting</h3>
                         <p class="text-gray-700 leading-relaxed">
                             If you encounter an `Error 404: Missing Header`, please verify that the first row of your CSV contains column names and not just data.
@@ -231,18 +297,71 @@
         </div>
     </footer>
 
+    <!-- JAVASCRIPT BEHAVIOR BLOCK -->
     <script>
-        /**
-         * Simple function to switch between the Home and Docs sections,
-         * simulating a Single Page Application (SPA) feel.
-         */
+        // Global references for Scrollspy
+        let docSections = [];
+        let docNavLinks = [];
+        let headerElement;
+
         document.addEventListener('DOMContentLoaded', () => {
+            // Get required elements
+            headerElement = document.getElementById('main-header');
+            
+            // Initialize document sections and links for Scrollspy
+            docSections = document.querySelectorAll('.doc-section');
+            docNavLinks = document.querySelectorAll('.doc-nav-link');
+
             // Check the URL hash on load and show the appropriate section
             const initialHash = window.location.hash.substring(1) || 'home';
-            showSection(initialHash, document.getElementById(`nav-${initialHash}`));
+            // Note: We pass null for the event when initializing from hash
+            showSection(null, initialHash, document.getElementById(`nav-${initialHash}`));
         });
 
-        function showSection(sectionId, clickedElement) {
+        // --- Mobile Drawer Control Functions ---
+
+        function openDocDrawer() {
+            const drawerContainer = document.getElementById('mobile-doc-drawer');
+            const overlay = document.getElementById('doc-overlay');
+            const menu = document.getElementById('doc-sidebar-mobile');
+
+            if (drawerContainer && overlay && menu) {
+                drawerContainer.classList.remove('opacity-0', 'pointer-events-none');
+                requestAnimationFrame(() => {
+                    overlay.classList.remove('opacity-0');
+                    menu.classList.remove('-translate-x-full');
+                });
+            }
+        }
+
+        function closeDocDrawer() {
+            const drawerContainer = document.getElementById('mobile-doc-drawer');
+            const overlay = document.getElementById('doc-overlay');
+            const menu = document.getElementById('doc-sidebar-mobile');
+
+            if (drawerContainer && overlay && menu) {
+                overlay.classList.add('opacity-0');
+                menu.classList.add('-translate-x-full');
+                
+                setTimeout(() => {
+                    drawerContainer.classList.add('opacity-0', 'pointer-events-none');
+                }, 300); 
+            }
+        }
+
+        // --- General Navigation Functions (SPA Logic) ---
+        // Changed signature to accept event first, making it optional.
+        function showSection(event, sectionId, clickedElement) {
+            // CRITICAL FIX: Stop the browser from executing its default anchor jump
+            if (event) {
+                event.preventDefault();
+            }
+
+            // Always scroll to top when switching major sections
+            window.scrollTo(0, 0);
+
+            const docToggleBtn = document.getElementById('doc-toggle-btn');
+            
             // Hide all content sections
             document.querySelectorAll('.content-section').forEach(section => {
                 section.classList.add('hidden');
@@ -254,7 +373,7 @@
                 targetSection.classList.remove('hidden');
             }
 
-            // Update active navigation link styling
+            // Update active navigation link styling for the top menu
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.classList.remove('active-link');
                 link.classList.add('text-gray-600');
@@ -265,12 +384,23 @@
                 clickedElement.classList.remove('text-gray-600');
             }
 
-            // If navigating to docs, ensure the first doc link is active
+            // CONTROL MOBILE TOC BUTTON VISIBILITY & SCROLLSPY
             if (sectionId === 'docs') {
+                if (docToggleBtn) {
+                    docToggleBtn.classList.remove('hidden');
+                }
+                document.addEventListener('scroll', handleScrollspy);
+
+                // Set initial active doc link for visual feedback
                 const firstDocLink = document.querySelector('#doc-sidebar a');
                 if (firstDocLink) {
-                    setActiveDocLink(firstDocLink);
+                    setActiveDocLink(firstDocLink, false, true); 
                 }
+            } else {
+                if (docToggleBtn) {
+                    docToggleBtn.classList.add('hidden');
+                }
+                document.removeEventListener('scroll', handleScrollspy);
             }
             
             // Update the URL hash
@@ -278,22 +408,71 @@
         }
 
         /**
-         * Sets the active state for documentation sidebar links.
+         * Scrollspy logic: Tracks scroll position and updates the active link in the TOC.
          */
-        function setActiveDocLink(clickedElement) {
-            // Remove active styles from all doc links
-            document.querySelectorAll('#doc-sidebar a').forEach(link => {
-                link.classList.remove('font-bold', 'text-blue-600');
-                link.classList.add('text-sm');
+        function handleScrollspy() {
+            let currentActiveLink = null;
+            
+            // The scroll threshold is set slightly larger than the header height for visibility
+            const scrollThreshold = headerElement ? headerElement.offsetHeight + 10 : 150; 
+            
+            // Find the section currently closest to the top
+            docSections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                
+                // Check if the section top is visible within the threshold
+                if (rect.top <= scrollThreshold && rect.bottom > scrollThreshold) {
+                    currentActiveLink = section.id;
+                }
             });
 
-            // Add active styles to the clicked element
-            clickedElement.classList.add('font-bold', 'text-blue-600');
-            clickedElement.classList.remove('text-sm');
+            if (currentActiveLink) {
+                docNavLinks.forEach(link => {
+                    const linkTarget = link.getAttribute('href').substring(1);
+                    
+                    // Clear previous active styles
+                    link.classList.remove('doc-active-link', 'font-bold', 'text-blue-600');
+                    link.classList.add('text-sm');
 
-            // Scroll to the content section
-            const targetId = clickedElement.getAttribute('href').substring(1);
-            document.getElementById(targetId).scrollIntoView({ behavior: 'smooth' });
+                    // Apply new active styles
+                    if (linkTarget === currentActiveLink) {
+                        link.classList.add('doc-active-link', 'font-bold', 'text-blue-600');
+                    }
+                });
+            }
+        }
+
+
+        /**
+         * Sets the active state for documentation sidebar links and scrolls to the section.
+         */
+        function setActiveDocLink(clickedElement, isMobileClick = false, skipScroll = false) {
+            
+            // Clear all previous active styles on all doc links
+            docNavLinks.forEach(link => {
+                link.classList.remove('doc-active-link', 'font-bold', 'text-blue-600');
+                link.classList.add('text-sm');
+            });
+            
+            const targetHref = clickedElement.getAttribute('href');
+            const targetId = targetHref.substring(1);
+            const targetElement = document.getElementById(targetId);
+            
+            // Apply active styles to both matching desktop and mobile links
+            document.querySelectorAll(`a[href="${targetHref}"]`).forEach(link => {
+                 link.classList.add('doc-active-link', 'font-bold', 'text-blue-600');
+                 link.classList.remove('text-sm');
+            });
+            
+            if (!skipScroll && targetElement) {
+                // Use standard scrollIntoView. The CSS scroll-margin-top handles the offset!
+                targetElement.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // Close mobile drawer if the click originated there
+            if (isMobileClick) {
+                closeDocDrawer();
+            }
         }
 
         // Handle navigation when the hash changes (e.g., back/forward buttons)
@@ -301,7 +480,8 @@
             const hash = window.location.hash.substring(1) || 'home';
             const navLink = document.getElementById(`nav-${hash}`);
             if (navLink) {
-                showSection(hash, navLink);
+                // Note: We pass null for the event when updating from hash
+                showSection(null, hash, navLink);
             }
         };
 
