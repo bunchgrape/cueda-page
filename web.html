@@ -91,48 +91,62 @@
             <div class="text-center py-20 bg-white rounded-xl shadow-lg border border-gray-100">
                 <div class="max-w-3xl mx-auto">
                     <h1 class="text-5xl font-extrabold text-gray-900 mb-4 tracking-tight">
-                        Ultra fast, GPU-accelerated <span class="text-blue-600">logic synthesis</span> tool
+                        Revolutionizing <span class="text-blue-600">Logic Synthesis</span> with GPU Acceleration
                     </h1>
                     <p class="text-xl text-gray-600 mb-8">
-                        Build a chip in <span class="text-blue-800">1 hour </span>
+                        The fastest path from RTL to GDS: Achieve <span class="text-blue-800">unprecedented turnaround time</span> and industry-leading quality of results.
                     </p>
                     <!-- IMPORTANT FIX: Passing the event object and preventing default hash behavior -->
                     <a href="#docs" class="inline-block bg-indigo-600 text-white text-xl font-semibold py-3 px-8 rounded-full hover:bg-indigo-700 transition duration-300 shadow-xl transform hover:scale-105" onclick="showSection(event, 'docs', document.getElementById('nav-docs'))">
-                        Get Started Now
+                        Explore Documentation
                     </a>
                 </div>
             </div>
 
             <!-- Feature Grid -->
             <div class="mt-16 grid md:grid-cols-3 gap-8">
-                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100">
-                    <div class="text-blue-500 mb-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0h6"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">Instant Analysis</h3>
-                    <p class="text-gray-600">Upload your data and get key statistical insights in seconds. No waiting, just results.</p>
-                </div>
-
+                
+                <!-- Advantage 1: Instant Analysis -->
                 <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100">
                     <div class="text-green-500 mb-3">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">Interactive Visuals</h3>
-                    <p class="text-gray-600">Generate beautiful, customizable charts and graphs that are easy to share and embed.</p>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Instant Analysis</h3>
+                    <p class="text-gray-600">
+                        Integrated directly as a **VS Code extension**, CUEDA provides **instant performance estimation** (Timing, Area) for your RTL modules right as you code, shortening the design-loop cycle dramatically.
+                    </p>
                 </div>
 
+                <!-- Advantage 2: Ultra Fast Synthesis -->
                 <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100">
                     <div class="text-red-500 mb-3">
+                        <!-- Icon: Fast Clock/Timer for Speed/GPU Acceleration -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v3h8z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 16.121A3 3 0 1012.12 18 3 3 0 009.88 16.12z" />
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">Secure & Private</h3>
-                    <p class="text-gray-600">Your data is processed locally whenever possible, ensuring maximum privacy and security.</p>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Ultra Fast Synthesis</h3>
+                    <p class="text-gray-600">
+                        We leverage **GPU-accelerated operators** from `abc` synthesis, including `rewrite`, `balance`, `refactor`, `resub`, and more, cutting synthesis runtimes by **up to 10x** on complex designs.
+                    </p>
+                </div>
+
+                <!-- Advantage 3: Industry Matching Performance -->
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100">
+                    <div class="text-blue-500 mb-3">
+                        <!-- Icon: Document with Magnifying Glass for VS Code Extension -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5v2m6-2v2"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Industry Matching Performance</h3>
+                    <p class="text-gray-600">
+                        Our synthesized netlists deliver Quality of Results (QoR) across Timing, DRV, Power, and Area that **match or exceed** leading commercial tools like **Cadence Genus** and **Synopsys Design Compiler (DC)** on standard test benches.
+                    </p>
                 </div>
             </div>
         </section>
@@ -218,10 +232,10 @@
                     <section id="doc-overview" class="mb-10 doc-section">
                         <h3 class="text-2xl font-semibold text-blue-700 mb-3 pt-6">1. Overview</h3>
                         <p class="text-gray-700 leading-relaxed mb-4">
-                            ToolName is designed to be the fastest way to gain actionable insights from large, messy datasets. It uses proprietary algorithms to clean, normalize, and analyze data for common patterns in scientific research and business intelligence. Our goal is to reduce data processing time by 80%.
+                            CUEDA is a state-of-the-art logic synthesis tool that drastically accelerates the Physical Design cycle using GPU-based optimization techniques. We aim to provide chip designers with the speed of hardware acceleration combined with the quality of results (QoR) expected from commercial-grade EDA tools.
                         </p>
                         <p class="text-gray-700 leading-relaxed">
-                            This documentation will guide you through setup, data formatting, and interpreting the results generated by the tool.
+                            This documentation will guide you through setting up your environment, running synthesis jobs, and maximizing the performance benefits of our GPU-accelerated flow.
                         </p>
                     </section>
 
@@ -229,35 +243,44 @@
                     <section id="doc-installation" class="mb-10 doc-section">
                         <h3 class="text-2xl font-semibold text-blue-700 mb-3 pt-6">2. Installation & Setup</h3>
                         <p class="text-gray-700 leading-relaxed mb-4">
-                            ToolName is a web-based application, requiring no local installation. Simply navigate to the <a href="#" class="text-indigo-600 hover:underline font-medium">Run Tool</a> page to begin.
+                            The CUEDA environment consists of two main components: the web-based synthesis engine and the local VS Code extension for design integration.
                         </p>
-                        <h4 class="text-xl font-medium text-gray-800 mb-2">Prerequisites</h4>
+                        <h4 class="text-xl font-medium text-gray-800 mb-2">Web Engine Prerequisites</h4>
                         <ul class="list-disc list-inside space-y-1 text-gray-600 ml-4">
-                            <li>Modern web browser (Chrome, Firefox, Edge, Safari).</li>
-                            <li>Data must be in CSV, TSV, or JSON format.</li>
-                            <li>A reliable internet connection.</li>
+                            <li>Modern web browser.</li>
+                            <li>Verilog or VHDL RTL design files.</li>
+                            <li>Standard cell library (Liberty format, provided during setup).</li>
                         </ul>
+                        <h4 class="text-xl font-medium text-gray-800 mt-4 mb-2">VS Code Extension Setup</h4>
+                        <ol class="list-decimal list-inside space-y-1 text-gray-600 ml-4">
+                            <li>Search for "CUEDA RTL Estimator" in the VS Code Marketplace.</li>
+                            <li>Install the extension.</li>
+                            <li>Configure the API endpoint in the extension settings to enable real-time analysis.</li>
+                        </ol>
                     </section>
 
                     <!-- 3. Data Preparation -->
                     <section id="doc-data-prep" class="mb-10 doc-section">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 pt-6">3. Data Preparation</h3>
+                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 pt-6">3. Synthesis Flow Preparation</h3>
                         <p class="text-gray-700 leading-relaxed mb-4">
-                            For optimal results, ensure your input file adheres to the following structure.
+                            Ensure your design files and constraints are properly structured for the synthesis engine.
                         </p>
-                        <div class="bg-gray-100 p-4 rounded-lg text-sm font-mono overflow-x-auto text-gray-800">
-                            <pre>ID, FeatureA, FeatureB, Result\n1, 0.5, 12, True\n2, 1.2, 8, False</pre>
-                        </div>
+                        <h4 class="text-xl font-medium text-gray-800 mb-2">Input Files Checklist</h4>
+                        <ul class="list-disc list-inside space-y-1 text-gray-600 ml-4">
+                            <li>**RTL Files:** All `.v` or `.vhdl` files for the design hierarchy.</li>
+                            <li>**Constraints:** A primary SDC (Synopsys Design Constraints) file defining clocks, I/O delays, and operating conditions.</li>
+                            <li>**Library:** Link to the technology library to be used for mapping.</li>
+                        </ul>
                     </section>
                     
                     <!-- 4. Running an Analysis -->
                     <section id="doc-running" class="mb-10 doc-section">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 pt-6">4. Running an Analysis</h3>
+                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 pt-6">4. Running a Synthesis Job</h3>
                         <ol class="list-decimal list-inside space-y-2 text-gray-700 ml-4">
-                            <li>Click the "Upload Data" button.</li>
-                            <li>Select your prepared file.</li>
-                            <li>Choose an analysis mode (Standard, Deep Dive, or Custom).</li>
-                            <li>Click "Process." Results will appear in the output panel below.</li>
+                            <li>Package your input files (RTL, SDC) into a compressed archive (.zip or .tar.gz).</li>
+                            <li>Upload the archive via the "Run Tool" interface.</li>
+                            <li>Select your target optimization goal (e.g., Area Minimization, Timing Closure).</li>
+                            <li>Click "Start Synthesis." The GPU-accelerated process will begin immediately.</li>
                         </ol>
                     </section>
 
@@ -265,15 +288,15 @@
                     <section id="doc-output" class="mb-10 doc-section">
                         <h3 class="text-2xl font-semibold text-blue-700 mb-3 pt-6">5. Interpreting Output</h3>
                         <p class="text-gray-700 leading-relaxed">
-                            The output panel provides a summary of key metrics (p-values, R-squared) and a suite of interactive visualizations. Pay special attention to the *Confidence Score* which indicates data quality.
+                            The output dashboard provides real-time updates on key metrics: Total Area, Critical Path Slack, Leakage Power, and DRC (Design Rule Check) violations. The final synthesized netlist (mapped to the target library) and synthesis report are available for download upon completion.
                         </p>
                     </section>
 
                     <!-- 6. Advanced Features -->
                     <section id="doc-advanced" class="mb-10 doc-section">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 pt-6">6. Advanced Features</h3>
+                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 pt-6">6. Advanced Features: GPU Customization</h3>
                         <p class="text-700 leading-relaxed">
-                            Explore the **Model Tuning** section to adjust hyperparameters for niche applications. You can also export custom R-scripts used in the backend for full reproducibility.
+                            For experienced users, the **Advanced Settings** panel allows granular control over the GPU-accelerated `abc` commands. You can specify custom sequences and parameters for optimization operators such as `resub -K <k_value>`, `balance`, and the overall `rewrite` depth, enabling fine-tuning for specific design architectures.
                         </p>
                     </section>
 
@@ -281,7 +304,7 @@
                     <section id="doc-troubleshoot" class="mb-10 doc-section">
                         <h3 class="text-2xl font-semibold text-blue-700 mb-3 pt-6">7. Troubleshooting</h3>
                         <p class="text-gray-700 leading-relaxed">
-                            If you encounter an `Error 404: Missing Header`, please verify that the first row of your CSV contains column names and not just data.
+                            If you encounter a "GPU Resource Allocation Failure," please try resubmitting your job or contacting support. This typically means the assigned hardware resource is temporarily unavailable. If Timing is significantly off, double-check the syntax in your SDC file for correct clock definitions.
                         </p>
                     </section>
                 </article>
@@ -293,7 +316,7 @@
     <!-- Simple Footer -->
     <footer class="bg-gray-800 text-white py-6 mt-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm">
-            &copy; 2025 ToolName. All rights reserved. | <a href="#" class="hover:text-blue-400">Privacy Policy</a>
+            &copy; 2025 CUEDA. All rights reserved. | <a href="#" class="hover:text-blue-400">Privacy Policy</a>
         </div>
     </footer>
 
