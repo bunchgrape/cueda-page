@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tool Website: Introduction & Docs</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for the scroll behavior and sticky navigation */
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fb; /* Light off-white background */
+        }
+        .active-link {
+            border-bottom: 2px solid #6b9ef1; /* Blue border for active nav link */
+            color: #173a9a; /* Darker text for active link */
+            font-weight: 600;
+        }
+        /* Custom scrollbar for the documentation sidebar */
+        #doc-sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+        #doc-sidebar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 2px;
+        }
+        #doc-sidebar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Main Navigation Bar (Sticky at the top) -->
+    <header class="sticky top-0 z-50 bg-white shadow-md">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-4">
+            <!-- Logo/Tool Name -->
+            <a href="#home" class="text-2xl font-bold text-gray-800 tracking-tight">
+                CU<span class="text-blue-600">EDA</span>
+            </a>
+            
+            <!-- Navigation Links -->
+            <div class="flex space-x-6 text-lg">
+                <a href="#home" id="nav-home" class="nav-link text-gray-600 hover:text-blue-600 transition duration-150 py-1 active-link" onclick="showSection('home', this)">
+                    Introduction
+                </a>
+                <a href="#docs" id="nav-docs" class="nav-link text-gray-600 hover:text-blue-600 transition duration-150 py-1" onclick="showSection('docs', this)">
+                    Documentation
+                </a>
+                <a href="#" class="text-white bg-blue-500 hover:bg-blue-700 font-medium py-1.5 px-4 rounded-lg shadow-md transition duration-150">
+                    Run Tool
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        <!-- 1. Introduction/Home Section -->
+        <section id="home" class="content-section">
+            <div class="text-center py-20 bg-white rounded-xl shadow-lg border border-gray-100">
+                <div class="max-w-3xl mx-auto">
+                    <h1 class="text-5xl font-extrabold text-gray-900 mb-4 tracking-tight">
+                        Ultra fast, GPU-accelerated <span class="text-blue-600">logic synthesis</span> tool
+                    </h1>
+                    <p class="text-xl text-gray-600 mb-8">
+                        Build a chip in <span class="text-blue-800">1 hour </span>
+                    </p>
+                    <a href="#docs" class="inline-block bg-indigo-600 text-white text-xl font-semibold py-3 px-8 rounded-full hover:bg-indigo-700 transition duration-300 shadow-xl transform hover:scale-105" onclick="showSection('docs', document.getElementById('nav-docs'))">
+                        Get Started Now
+                    </a>
+                </div>
+            </div>
+
+            <!-- Feature Grid -->
+            <div class="mt-16 grid md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100">
+                    <div class="text-blue-500 mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0h6"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Instant Analysis</h3>
+                    <p class="text-gray-600">Upload your data and get key statistical insights in seconds. No waiting, just results.</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100">
+                    <div class="text-green-500 mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Interactive Visuals</h3>
+                    <p class="text-gray-600">Generate beautiful, customizable charts and graphs that are easy to share and embed.</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100">
+                    <div class="text-red-500 mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v3h8z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Secure & Private</h3>
+                    <p class="text-gray-600">Your data is processed locally whenever possible, ensuring maximum privacy and security.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Documentation/Getting Started Section -->
+        <section id="docs" class="content-section hidden">
+            <div class="flex flex-col lg:flex-row gap-8">
+                
+                <!-- Left Sidebar Navigation -->
+                <aside class="w-full lg:w-1/4 sticky top-20 h-96 overflow-y-auto pr-4" id="doc-sidebar">
+                    <nav class="space-y-2">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-3">Table of Contents</h4>
+                        <a href="#doc-overview" class="block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm font-medium" onclick="setActiveDocLink(this)">
+                            1. Overview
+                        </a>
+                        <a href="#doc-installation" class="block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this)">
+                            2. Installation & Setup
+                        </a>
+                        <a href="#doc-data-prep" class="block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this)">
+                            3. Data Preparation
+                        </a>
+                        <a href="#doc-running" class="block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this)">
+                            4. Running an Analysis
+                        </a>
+                        <a href="#doc-output" class="block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this)">
+                            5. Interpreting Output
+                        </a>
+                        <a href="#doc-advanced" class="block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this)">
+                            6. Advanced Features
+                        </a>
+                        <a href="#doc-troubleshoot" class="block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this)">
+                            7. Troubleshooting
+                        </a>
+                    </nav>
+                </aside>
+
+                <!-- Right Documentation Content -->
+                <article class="w-full lg:w-3/4 bg-white p-8 rounded-xl shadow-lg border border-gray-100">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-6 border-b pb-2">Getting Started & Documentation</h2>
+
+                    <!-- 1. Overview -->
+                    <section id="doc-overview" class="mb-10">
+                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 pt-6">1. Overview</h3>
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            ToolName is designed to be the fastest way to gain actionable insights from large, messy datasets. It uses proprietary algorithms to clean, normalize, and analyze data for common patterns in scientific research and business intelligence. Our goal is to reduce data processing time by 80%.
+                        </p>
+                        <p class="text-gray-700 leading-relaxed">
+                            This documentation will guide you through setup, data formatting, and interpreting the results generated by the tool.
+                        </p>
+                    </section>
+
+                    <!-- 2. Installation & Setup -->
+                    <section id="doc-installation" class="mb-10">
+                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 pt-6">2. Installation & Setup</h3>
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            ToolName is a web-based application, requiring no local installation. Simply navigate to the <a href="#" class="text-indigo-600 hover:underline font-medium">Run Tool</a> page to begin.
+                        </p>
+                        <h4 class="text-xl font-medium text-gray-800 mb-2">Prerequisites</h4>
+                        <ul class="list-disc list-inside space-y-1 text-gray-600 ml-4">
+                            <li>Modern web browser (Chrome, Firefox, Edge, Safari).</li>
+                            <li>Data must be in CSV, TSV, or JSON format.</li>
+                            <li>A reliable internet connection.</li>
+                        </ul>
+                    </section>
+
+                    <!-- 3. Data Preparation -->
+                    <section id="doc-data-prep" class="mb-10">
+                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 pt-6">3. Data Preparation</h3>
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            For optimal results, ensure your input file adheres to the following structure.
+                        </p>
+                        <div class="bg-gray-100 p-4 rounded-lg text-sm font-mono overflow-x-auto text-gray-800">
+                            <pre>ID, FeatureA, FeatureB, Result\n1, 0.5, 12, True\n2, 1.2, 8, False</pre>
+                        </div>
+                    </section>
+                    
+                    <!-- 4. Running an Analysis -->
+                    <section id="doc-running" class="mb-10">
+                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 pt-6">4. Running an Analysis</h3>
+                        <ol class="list-decimal list-inside space-y-2 text-gray-700 ml-4">
+                            <li>Click the "Upload Data" button.</li>
+                            <li>Select your prepared file.</li>
+                            <li>Choose an analysis mode (Standard, Deep Dive, or Custom).</li>
+                            <li>Click "Process." Results will appear in the output panel below.</li>
+                        </ol>
+                    </section>
+
+                    <!-- 5. Interpreting Output -->
+                    <section id="doc-output" class="mb-10">
+                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 pt-6">5. Interpreting Output</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            The output panel provides a summary of key metrics (p-values, R-squared) and a suite of interactive visualizations. Pay special attention to the *Confidence Score* which indicates data quality.
+                        </p>
+                    </section>
+
+                    <!-- 6. Advanced Features -->
+                    <section id="doc-advanced" class="mb-10">
+                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 pt-6">6. Advanced Features</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            Explore the **Model Tuning** section to adjust hyperparameters for niche applications. You can also export custom R-scripts used in the backend for full reproducibility.
+                        </p>
+                    </section>
+
+                    <!-- 7. Troubleshooting -->
+                    <section id="doc-troubleshoot" class="mb-10">
+                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 pt-6">7. Troubleshooting</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            If you encounter an `Error 404: Missing Header`, please verify that the first row of your CSV contains column names and not just data.
+                        </p>
+                    </section>
+                </article>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Simple Footer -->
+    <footer class="bg-gray-800 text-white py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm">
+            &copy; 2025 ToolName. All rights reserved. | <a href="#" class="hover:text-blue-400">Privacy Policy</a>
+        </div>
+    </footer>
+
+    <script>
+        /**
+         * Simple function to switch between the Home and Docs sections,
+         * simulating a Single Page Application (SPA) feel.
+         */
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check the URL hash on load and show the appropriate section
+            const initialHash = window.location.hash.substring(1) || 'home';
+            showSection(initialHash, document.getElementById(`nav-${initialHash}`));
+        });
+
+        function showSection(sectionId, clickedElement) {
+            // Hide all content sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+
+            // Show the requested section
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.remove('hidden');
+            }
+
+            // Update active navigation link styling
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active-link');
+                link.classList.add('text-gray-600');
+            });
+
+            if (clickedElement) {
+                clickedElement.classList.add('active-link');
+                clickedElement.classList.remove('text-gray-600');
+            }
+
+            // If navigating to docs, ensure the first doc link is active
+            if (sectionId === 'docs') {
+                const firstDocLink = document.querySelector('#doc-sidebar a');
+                if (firstDocLink) {
+                    setActiveDocLink(firstDocLink);
+                }
+            }
+            
+            // Update the URL hash
+            history.pushState(null, null, `#${sectionId}`);
+        }
+
+        /**
+         * Sets the active state for documentation sidebar links.
+         */
+        function setActiveDocLink(clickedElement) {
+            // Remove active styles from all doc links
+            document.querySelectorAll('#doc-sidebar a').forEach(link => {
+                link.classList.remove('font-bold', 'text-blue-600');
+                link.classList.add('text-sm');
+            });
+
+            // Add active styles to the clicked element
+            clickedElement.classList.add('font-bold', 'text-blue-600');
+            clickedElement.classList.remove('text-sm');
+
+            // Scroll to the content section
+            const targetId = clickedElement.getAttribute('href').substring(1);
+            document.getElementById(targetId).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Handle navigation when the hash changes (e.g., back/forward buttons)
+        window.onhashchange = () => {
+            const hash = window.location.hash.substring(1) || 'home';
+            const navLink = document.getElementById(`nav-${hash}`);
+            if (navLink) {
+                showSection(hash, navLink);
+            }
+        };
+
+    </script>
+
+</body>
+</html>
