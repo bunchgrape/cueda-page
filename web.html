@@ -5,9 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tool Website: Introduction & Docs</title>
     <!-- Load Tailwind CSS -->
-    <!-- <link rel="stylesheet" href="./res/style.css" data-precedence="next"/> -->
-    <link href="./res/tailwind.css" rel="stylesheet">
     <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <link href="./res/tailwind.css" rel="stylesheet">
+    <script>
+        // Custom Tailwind Configuration for CUHK Theme Colors
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'cuhk-purple': '#532E74', // CUHK Primary Color (Violet)
+                        'cuhk-gold': '#B98336',   // CUHK Accent Color (Gold)
+                    }
+                }
+            }
+        }
+    </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <style>
         /* Custom styles for the scroll behavior and sticky navigation */
@@ -19,8 +31,9 @@
             background-color: #f7f9fb; /* Light off-white background */
         }
         .active-link {
-            border-bottom: 2px solid #6b9ef1; /* Blue border for active nav link */
-            color: #173a9a; /* Darker text for active link */
+            /* Mapped to CUHK Gold and Purple */
+            border-bottom: 2px solid #B98336; /* Gold border for active nav link */
+            color: #532E74; /* Dark Purple text for active link */
             font-weight: 600;
         }
         /* Custom scrollbar for the documentation sidebar on desktop */
@@ -37,7 +50,7 @@
         /* Style for active doc links updated by Scrollspy */
         .doc-active-link {
             font-weight: 700;
-            color: #1d4ed8; /* Blue-700 for active doc link */
+            color: #B98336; /* CUHK Gold for active doc link */
         }
 
         /* --- FIX for Sticky Header: CSS Scroll Margin --- */
@@ -55,13 +68,13 @@
             
             <!-- Left Side: Logo and Small Button -->
             <div class="flex items-center space-x-4">
-                <!-- Logo/Tool Name -->
+                <!-- Logo/Tool Name (Purple base, Gold accent) -->
                 <a href="#home" class="text-2xl font-bold text-gray-800 tracking-tight">
-                    CU<span class="text-blue-600">EDA</span>
+                    CU<span class="text-cuhk-gold">EDA</span>
                 </a>
                 
-                <!-- Small Run Tool Button -->
-                <a href="#" class="text-white bg-blue-600 hover:bg-blue-700 text-sm font-semibold py-1 px-3 rounded-md shadow-sm transition duration-150">
+                <!-- Small Run Tool Button (CUHK Purple) -->
+                <a href="#" class="text-white bg-cuhk-purple hover:bg-[#43235A] text-sm font-semibold py-1 px-3 rounded-md shadow-sm transition duration-150">
                     Run Tool
                 </a>
             </div>
@@ -69,10 +82,10 @@
             <!-- Right Side: Navigation Links (Introduction and Documentation) -->
             <div class="flex space-x-6 text-lg">
                 <!-- IMPORTANT FIX: Passing the event object and preventing default hash behavior -->
-                <a href="#home" id="nav-home" class="nav-link text-gray-600 hover:text-blue-600 transition duration-150 py-1 active-link" onclick="showSection(event, 'home', this)">
+                <a href="#home" id="nav-home" class="nav-link text-gray-600 hover:text-cuhk-purple transition duration-150 py-1 active-link" onclick="showSection(event, 'home', this)">
                     Introduction
                 </a>
-                <a href="#docs" id="nav-docs" class="nav-link text-gray-600 hover:text-blue-600 transition duration-150 py-1" onclick="showSection(event, 'docs', this)">
+                <a href="#docs" id="nav-docs" class="nav-link text-gray-600 hover:text-cuhk-purple transition duration-150 py-1" onclick="showSection(event, 'docs', this)">
                     Documentation
                 </a>
             </div>
@@ -93,13 +106,13 @@
             <div class="text-center py-20 bg-white rounded-xl shadow-lg border border-gray-100">
                 <div class="max-w-3xl mx-auto">
                     <h1 class="text-5xl font-extrabold text-gray-900 mb-4 tracking-tight">
-                        Revolutionizing <span class="text-blue-600">Logic Synthesis</span> with GPU Acceleration
+                        Revolutionizing <br> <span class="text-cuhk-gold">Logic Synthesis</span> <br> with GPU Acceleration
                     </h1>
                     <p class="text-xl text-gray-600 mb-8">
-                        The fastest path from RTL to GDS: Achieve <span class="text-blue-800">unprecedented turnaround time</span> and industry-leading quality of results.
+                        The fastest path for RTL Synthesis: Achieve <span class="text-cuhk-purple">unprecedented turnaround time</span>.
                     </p>
                     <!-- IMPORTANT FIX: Passing the event object and preventing default hash behavior -->
-                    <a href="#docs" class="inline-block bg-indigo-600 text-white text-xl font-semibold py-3 px-8 rounded-full hover:bg-indigo-700 transition duration-300 shadow-xl transform hover:scale-105" onclick="showSection(event, 'docs', document.getElementById('nav-docs'))">
+                    <a href="#docs" class="inline-block bg-cuhk-purple text-white text-xl font-semibold py-3 px-8 rounded-full hover:bg-[#43235A] transition duration-300 shadow-xl transform hover:scale-105" onclick="showSection(event, 'docs', document.getElementById('nav-docs'))">
                         Explore Documentation
                     </a>
                 </div>
@@ -108,7 +121,7 @@
             <!-- Feature Grid -->
             <div class="mt-16 grid md:grid-cols-3 gap-8">
                 
-                <!-- Advantage 1: Instant Analysis -->
+                <!-- Advantage 1: Instant Analysis (Color neutral) -->
                 <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100">
                     <div class="text-green-500 mb-3">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -121,7 +134,7 @@
                     </p>
                 </div>
 
-                <!-- Advantage 2: Ultra Fast Synthesis -->
+                <!-- Advantage 2: Ultra Fast Synthesis (Color neutral) -->
                 <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100">
                     <div class="text-red-500 mb-3">
                         <!-- Icon: Fast Clock/Timer for Speed/GPU Acceleration -->
@@ -136,9 +149,9 @@
                     </p>
                 </div>
 
-                <!-- Advantage 3: Industry Matching Performance -->
+                <!-- Advantage 3: Industry Matching Performance (Color neutral) -->
                 <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100">
-                    <div class="text-blue-500 mb-3">
+                    <div class="text-cuhk-gold mb-3">
                         <!-- Icon: Document with Magnifying Glass for VS Code Extension -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5v2m6-2v2"/>
@@ -170,25 +183,25 @@
                     <!-- Nav Content for Mobile -->
                     <nav class="space-y-2 pt-6 overflow-y-auto h-full pr-2" id="doc-sidebar-mobile-nav">
                         <h4 class="text-xl font-bold text-gray-800 mb-3 border-b pb-2">Table of Contents</h4>
-                        <a href="#doc-overview" class="doc-nav-link block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm font-medium" onclick="setActiveDocLink(this, true)">
+                        <a href="#doc-overview" class="doc-nav-link block text-gray-700 hover:text-cuhk-purple py-1 transition duration-150 text-sm font-medium" onclick="setActiveDocLink(this, true)">
                             1. Overview
                         </a>
-                        <a href="#doc-installation" class="doc-nav-link block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this, true)">
+                        <a href="#doc-installation" class="doc-nav-link block text-gray-700 hover:text-cuhk-purple py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this, true)">
                             2. Installation & Setup
                         </a>
-                        <a href="#doc-data-prep" class="doc-nav-link block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this, true)">
+                        <a href="#doc-data-prep" class="doc-nav-link block text-gray-700 hover:text-cuhk-purple py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this, true)">
                             3. Data Preparation
                         </a>
-                        <a href="#doc-running" class="doc-nav-link block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this, true)">
+                        <a href="#doc-running" class="doc-nav-link block text-gray-700 hover:text-cuhk-purple py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this, true)">
                             4. Running an Analysis
                         </a>
-                        <a href="#doc-output" class="doc-nav-link block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this, true)">
+                        <a href="#doc-output" class="doc-nav-link block text-gray-700 hover:text-cuhk-purple py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this, true)">
                             5. Interpreting Output
                         </a>
-                        <a href="#doc-advanced" class="doc-nav-link block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this, true)">
+                        <a href="#doc-advanced" class="doc-nav-link block text-gray-700 hover:text-cuhk-purple py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this, true)">
                             6. Advanced Features
                         </a>
-                        <a href="#doc-troubleshoot" class="doc-nav-link block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this, true)">
+                        <a href="#doc-troubleshoot" class="doc-nav-link block text-gray-700 hover:text-cuhk-purple py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this, true)">
                             7. Troubleshooting
                         </a>
                     </nav>
@@ -202,25 +215,25 @@
                 <aside class="w-full lg:w-1/4 sticky lg:top-20 lg:h-96 lg:overflow-y-auto lg:pr-4 hidden lg:block bg-white p-6 rounded-xl shadow-lg border border-gray-100" id="doc-sidebar">
                     <nav class="space-y-2">
                         <h4 class="text-lg font-semibold text-gray-800 mb-3 border-b pb-2">Table of Contents</h4>
-                        <a href="#doc-overview" class="doc-nav-link block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm font-medium" onclick="setActiveDocLink(this)">
+                        <a href="#doc-overview" class="doc-nav-link block text-gray-700 hover:text-cuhk-purple py-1 transition duration-150 text-sm font-medium" onclick="setActiveDocLink(this)">
                             1. Overview
                         </a>
-                        <a href="#doc-installation" class="doc-nav-link block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this)">
+                        <a href="#doc-installation" class="doc-nav-link block text-gray-700 hover:text-cuhk-purple py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this)">
                             2. Installation & Setup
                         </a>
-                        <a href="#doc-data-prep" class="doc-nav-link block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this)">
+                        <a href="#doc-data-prep" class="doc-nav-link block text-gray-700 hover:text-cuhk-purple py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this)">
                             3. Data Preparation
                         </a>
-                        <a href="#doc-running" class="doc-nav-link block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this)">
+                        <a href="#doc-running" class="doc-nav-link block text-gray-700 hover:text-cuhk-purple py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this)">
                             4. Running an Analysis
                         </a>
-                        <a href="#doc-output" class="doc-nav-link block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this)">
+                        <a href="#doc-output" class="doc-nav-link block text-gray-700 hover:text-cuhk-purple py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this)">
                             5. Interpreting Output
                         </a>
-                        <a href="#doc-advanced" class="doc-nav-link block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this)">
+                        <a href="#doc-advanced" class="doc-nav-link block text-gray-700 hover:text-cuhk-purple py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this)">
                             6. Advanced Features
                         </a>
-                        <a href="#doc-troubleshoot" class="doc-nav-link block text-gray-700 hover:text-blue-600 py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this)">
+                        <a href="#doc-troubleshoot" class="doc-nav-link block text-gray-700 hover:text-cuhk-purple py-1 transition duration-150 text-sm" onclick="setActiveDocLink(this)">
                             7. Troubleshooting
                         </a>
                     </nav>
@@ -232,7 +245,7 @@
 
                     <!-- 1. Overview -->
                     <section id="doc-overview" class="mb-10 doc-section">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 pt-6">1. Overview</h3>
+                        <h3 class="text-2xl font-semibold text-cuhk-purple mb-3 pt-6">1. Overview</h3>
                         <p class="text-gray-700 leading-relaxed mb-4">
                             CUEDA is a state-of-the-art logic synthesis tool that drastically accelerates the Physical Design cycle using GPU-based optimization techniques. We aim to provide chip designers with the speed of hardware acceleration combined with the quality of results (QoR) expected from commercial-grade EDA tools.
                         </p>
@@ -243,7 +256,7 @@
 
                     <!-- 2. Installation & Setup -->
                     <section id="doc-installation" class="mb-10 doc-section">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 pt-6">2. Installation & Setup</h3>
+                        <h3 class="text-2xl font-semibold text-cuhk-purple mb-3 pt-6">2. Installation & Setup</h3>
                         <p class="text-gray-700 leading-relaxed mb-4">
                             The CUEDA environment consists of two main components: the web-based synthesis engine and the local VS Code extension for design integration.
                         </p>
@@ -263,7 +276,7 @@
 
                     <!-- 3. Data Preparation -->
                     <section id="doc-data-prep" class="mb-10 doc-section">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 pt-6">3. Synthesis Flow Preparation</h3>
+                        <h3 class="text-2xl font-semibold text-cuhk-purple mb-3 pt-6">3. Synthesis Flow Preparation</h3>
                         <p class="text-gray-700 leading-relaxed mb-4">
                             Ensure your design files and constraints are properly structured for the synthesis engine.
                         </p>
@@ -277,7 +290,7 @@
                     
                     <!-- 4. Running an Analysis -->
                     <section id="doc-running" class="mb-10 doc-section">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 pt-6">4. Running a Synthesis Job</h3>
+                        <h3 class="text-2xl font-semibold text-cuhk-purple mb-3 pt-6">4. Running a Synthesis Job</h3>
                         <ol class="list-decimal list-inside space-y-2 text-gray-700 ml-4">
                             <li>Package your input files (RTL, SDC) into a compressed archive (.zip or .tar.gz).</li>
                             <li>Upload the archive via the "Run Tool" interface.</li>
@@ -288,7 +301,7 @@
 
                     <!-- 5. Interpreting Output -->
                     <section id="doc-output" class="mb-10 doc-section">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 pt-6">5. Interpreting Output</h3>
+                        <h3 class="text-2xl font-semibold text-cuhk-purple mb-3 pt-6">5. Interpreting Output</h3>
                         <p class="text-gray-700 leading-relaxed">
                             The output dashboard provides real-time updates on key metrics: Total Area, Critical Path Slack, Leakage Power, and DRC (Design Rule Check) violations. The final synthesized netlist (mapped to the target library) and synthesis report are available for download upon completion.
                         </p>
@@ -296,7 +309,7 @@
 
                     <!-- 6. Advanced Features -->
                     <section id="doc-advanced" class="mb-10 doc-section">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 pt-6">6. Advanced Features: GPU Customization</h3>
+                        <h3 class="text-2xl font-semibold text-cuhk-purple mb-3 pt-6">6. Advanced Features: GPU Customization</h3>
                         <p class="text-700 leading-relaxed">
                             For experienced users, the **Advanced Settings** panel allows granular control over the GPU-accelerated `abc` commands. You can specify custom sequences and parameters for optimization operators such as `resub -K <k_value>`, `balance`, and the overall `rewrite` depth, enabling fine-tuning for specific design architectures.
                         </p>
@@ -304,7 +317,7 @@
 
                     <!-- 7. Troubleshooting -->
                     <section id="doc-troubleshoot" class="mb-10 doc-section">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 pt-6">7. Troubleshooting</h3>
+                        <h3 class="text-2xl font-semibold text-cuhk-purple mb-3 pt-6">7. Troubleshooting</h3>
                         <p class="text-gray-700 leading-relaxed">
                             If you encounter a "GPU Resource Allocation Failure," please try resubmitting your job or contacting support. This typically means the assigned hardware resource is temporarily unavailable. If Timing is significantly off, double-check the syntax in your SDC file for correct clock definitions.
                         </p>
@@ -318,7 +331,7 @@
     <!-- Simple Footer -->
     <footer class="bg-gray-800 text-white py-6 mt-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm">
-            &copy; 2025 CUEDA. All rights reserved. | <a href="#" class="hover:text-blue-400">Privacy Policy</a>
+            &copy; 2025 CUEDA. All rights reserved. | <a href="#" class="hover:text-cuhk-gold">Privacy Policy</a>
         </div>
     </footer>
 
@@ -456,12 +469,12 @@
                     const linkTarget = link.getAttribute('href').substring(1);
                     
                     // Clear previous active styles
-                    link.classList.remove('doc-active-link', 'font-bold', 'text-blue-600');
+                    link.classList.remove('doc-active-link', 'font-bold', 'text-cuhk-gold');
                     link.classList.add('text-sm');
 
                     // Apply new active styles
                     if (linkTarget === currentActiveLink) {
-                        link.classList.add('doc-active-link', 'font-bold', 'text-blue-600');
+                        link.classList.add('doc-active-link', 'font-bold', 'text-cuhk-gold');
                     }
                 });
             }
@@ -475,7 +488,7 @@
             
             // Clear all previous active styles on all doc links
             docNavLinks.forEach(link => {
-                link.classList.remove('doc-active-link', 'font-bold', 'text-blue-600');
+                link.classList.remove('doc-active-link', 'font-bold', 'text-cuhk-gold');
                 link.classList.add('text-sm');
             });
             
@@ -485,7 +498,7 @@
             
             // Apply active styles to both matching desktop and mobile links
             document.querySelectorAll(`a[href="${targetHref}"]`).forEach(link => {
-                 link.classList.add('doc-active-link', 'font-bold', 'text-blue-600');
+                 link.classList.add('doc-active-link', 'font-bold', 'text-cuhk-gold');
                  link.classList.remove('text-sm');
             });
             
