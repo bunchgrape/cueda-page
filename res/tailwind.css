@@ -22,6 +22,8 @@
     --color-gray-700: oklch(37.3% 0.034 259.733);
     --color-gray-800: oklch(27.8% 0.033 256.848);
     --color-gray-900: oklch(21% 0.034 264.665);
+    --color-cuhk-purple: #532E74;
+    --color-cuhk-gold: #B98336;
     --color-black: #000;
     --color-white: #fff;
     --spacing: 0.25rem;
@@ -612,6 +614,9 @@
   .bg-white {
     background-color: var(--color-white);
   }
+  .bg-cuhk-purple {
+    background-color: var(--color-cuhk-purple);
+  }
   .p-0\.5 {
     padding: calc(var(--spacing) * 0.5);
   }
@@ -769,6 +774,12 @@
   }
   .text-gray-900 {
     color: var(--color-gray-900);
+  }
+  .text-cuhk-gold {
+    color: var(--color-cuhk-gold);
+  }
+  .text-cuhk-purple {
+    color: var(--color-cuhk-purple);
   }
   .text-green-500 {
     color: var(--color-green-500);
