@@ -17,8 +17,17 @@ import {
   Network,
   Binary,
   FileCode,
-  ArrowRight
+  ArrowRight,
+  Maximize2
 } from 'lucide-react';
+
+/**
+ * CUHK Color Palette Constants
+ * Primary Purple: #532E74
+ * Accent Gold: #B98336
+ */
+const CUHK_PURPLE = '#532E74';
+const CUHK_GOLD = '#B98336';
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState('home');
@@ -41,26 +50,31 @@ const App = () => {
     <nav className="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-md border-b border-slate-200">
       <div className="max-w-[1440px] mx-auto px-6 h-16 flex items-center justify-between">
         <div className="flex items-center gap-8">
-          <button onClick={() => setCurrentPage('home')} className="text-2xl font-black tracking-tighter flex items-center text-slate-900 cursor-pointer outline-none hover:opacity-80 transition">
-            CU<span className="text-blue-600">EDA</span>
+          <button onClick={() => setCurrentPage('home')} className="text-2xl font-black tracking-tighter flex items-center text-slate-900 cursor-pointer outline-none hover:opacity-80 transition uppercase">
+            CU<span style={{ color: CUHK_GOLD }}>EDA</span>
           </button>
           <div className="hidden md:flex gap-6 text-sm font-semibold text-slate-600">
             <button 
-              onClick={() => setCurrentPage('technology')} 
-              className={`hover:text-blue-600 transition ${currentPage === 'technology' ? 'text-blue-600' : ''}`}
+              onClick={() => setCurrentPage('features')} 
+              className={`transition-colors hover:text-[${CUHK_PURPLE}] ${currentPage === 'features' ? `text-[${CUHK_PURPLE}]` : ''}`}
+              style={{ color: currentPage === 'features' ? CUHK_PURPLE : undefined }}
             >
-              Technology
+              Features
             </button>
             <button 
               onClick={() => setCurrentPage('docs')} 
-              className={`hover:text-blue-600 transition ${currentPage === 'docs' ? 'text-blue-600' : ''}`}
+              className={`transition-colors hover:text-[${CUHK_PURPLE}] ${currentPage === 'docs' ? `text-[${CUHK_PURPLE}]` : ''}`}
+              style={{ color: currentPage === 'docs' ? CUHK_PURPLE : undefined }}
             >
               Documentation
             </button>
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <button className="hidden sm:block bg-slate-900 hover:bg-slate-800 text-white px-5 py-2 rounded-md text-sm font-bold transition shadow-lg shadow-slate-900/10">
+          <button 
+            style={{ backgroundColor: CUHK_PURPLE }}
+            className="hidden sm:block hover:opacity-90 text-white px-5 py-2 rounded-md text-sm font-bold transition shadow-lg shadow-purple-900/10"
+          >
             Request Demo
           </button>
         </div>
@@ -72,22 +86,29 @@ const App = () => {
     <>
       <header className="relative w-full py-24 bg-white overflow-hidden border-b border-slate-200 flex justify-center">
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
-          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(#0f172a_1px,transparent_1px)] [background-size:32px_32px]"></div>
+          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(#532E74_1px,transparent_1px)] [background-size:32px_32px]"></div>
         </div>
         <div className="max-w-[1440px] mx-auto px-6 relative z-10 grid lg:grid-cols-2 gap-16 items-center">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-xs font-bold mb-6 tracking-widest uppercase">
+            <div 
+              style={{ backgroundColor: `${CUHK_PURPLE}10`, borderColor: `${CUHK_PURPLE}20`, color: CUHK_PURPLE }}
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-bold mb-6 tracking-widest uppercase"
+            >
               <Zap size={14} fill="currentColor" /> GPU-Accelerated Logic Synthesis
             </div>
             <h1 className="text-5xl lg:text-5xl font-extrabold text-slate-900 leading-[1.05] mb-6 tracking-tight">
-              Accelerate Circuit Design with <span className="text-blue-600">GPU-Acceleration</span>
+              Accelerate Circuit Design with <span style={{ color: CUHK_PURPLE }}>GPU-Acceleration</span>
             </h1>
             <p className="text-xl text-slate-600 mb-10 max-w-xl leading-relaxed">
               CUEDA delivers the industry's fastest VLSI logic synthesis turnaround time by offloading operators to the GPU, matching industry Quality of Results (QoR) at 20x speeds.
             </p>
             <div className="flex flex-wrap gap-4">
-              <button onClick={() => setCurrentPage('technology')} className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-md font-bold text-lg flex items-center gap-2 transition transform active:scale-95 shadow-xl shadow-blue-600/20">
-                Explore Tech <ChevronRight size={20} />
+              <button 
+                onClick={() => setCurrentPage('features')} 
+                style={{ backgroundColor: CUHK_PURPLE }}
+                className="hover:opacity-90 text-white px-8 py-4 rounded-md font-bold text-lg flex items-center gap-2 transition transform active:scale-95 shadow-xl shadow-purple-900/20"
+              >
+                Explore Features <ChevronRight size={20} />
               </button>
               <button onClick={() => setCurrentPage('docs')} className="bg-white hover:bg-slate-50 text-slate-900 px-8 py-4 rounded-md font-bold text-lg flex items-center gap-2 transition border border-slate-200 shadow-sm">
                 Documentation
@@ -105,8 +126,8 @@ const App = () => {
               <p className="text-slate-400">cueda&gt; read_hdl -v2k design.v</p>
               <p className="text-slate-400">cueda&gt; elaborate</p>
               <p className="text-slate-600 font-bold">cueda&gt; syn -effort high</p>
-              <p className="text-blue-400">[INFO] Dispatching 2.4M nodes to GPU...</p>
-              <p className="text-green-400">[SUCCESS] Synthesis complete, Overall Runtime: 10.00s</p>
+              <p className="text-blue-600">[INFO] Dispatching 2.4M nodes to GPU...</p>
+              <p className="text-emerald-600 font-bold">[SUCCESS] Synthesis complete, Overall Runtime: 10.00s</p>
             </div>
             <div className="mt-4 grid grid-cols-2 gap-4">
               <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
@@ -122,56 +143,65 @@ const App = () => {
         </div>
       </header>
 
-      <section className="w-full pt-24 pb-24 bg-slate-50">
+      <section className="w-full pt-20 pb-20 bg-slate-50">
         <div className="max-w-[1440px] mx-auto px-6">
-          <div className="grid lg:grid-cols-3 gap-10 mb-24">
-            <div className="group bg-white p-10 rounded-3xl border border-slate-200 hover:border-blue-500 transition-all duration-300 hover:shadow-2xl relative overflow-hidden cursor-pointer" onClick={() => setCurrentPage('docs')}>
-              <div className="bg-blue-50 p-4 rounded-2xl w-fit mb-8 text-blue-600 group-hover:scale-110 transition-transform duration-300">
-                <MousePointer2 size={32} strokeWidth={2} />
+          {/* Tighter grid for the feature blocks */}
+          <div className="max-w-5xl mx-auto grid lg:grid-cols-3 gap-6 mb-20">
+            <div className="group bg-white p-8 rounded-2xl border border-slate-200 transition-all duration-300 hover:shadow-xl relative overflow-hidden cursor-pointer" 
+                 onClick={() => setCurrentPage('docs')}
+                 onMouseEnter={(e) => e.currentTarget.style.borderColor = CUHK_PURPLE}
+                 onMouseLeave={(e) => e.currentTarget.style.borderColor = ''}>
+              <div style={{ backgroundColor: `${CUHK_PURPLE}10`, color: CUHK_PURPLE }} className="p-3 rounded-xl w-fit mb-6 group-hover:scale-110 transition-transform duration-300">
+                <MousePointer2 size={24} strokeWidth={2} />
               </div>
-              <h3 className="text-2xl font-bold mb-4 text-slate-900">Instant Feedback</h3>
-              <p className="text-slate-500 mb-8 leading-relaxed">
-                Real-time QoR evaluation directly in your editor as you code RTL, minimizing design iterations.
+              <h3 className="text-xl font-bold mb-3 text-slate-900">Instant Feedback</h3>
+              <p className="text-slate-500 mb-6 text-sm leading-relaxed">
+                Real-time QoR evaluation directly in your editor as you code RTL.
               </p>
-              <span className="inline-flex items-center gap-2 font-bold text-blue-600 group-hover:gap-3 transition-all">
-                Marketplace <ChevronRight size={18} />
+              <span style={{ color: CUHK_PURPLE }} className="inline-flex items-center gap-2 text-sm font-bold group-hover:gap-3 transition-all">
+                Marketplace <ChevronRight size={16} />
               </span>
             </div>
 
-            <div className="group bg-white p-10 rounded-3xl border border-slate-200 hover:border-blue-500 transition-all duration-300 hover:shadow-2xl cursor-pointer" onClick={() => setCurrentPage('technology')}>
-              <div className="bg-blue-50 p-4 rounded-2xl w-fit mb-8 text-blue-600 group-hover:scale-110 transition-transform duration-300">
-                <Cpu size={32} strokeWidth={2} />
+            <div className="group bg-white p-8 rounded-2xl border border-slate-200 transition-all duration-300 hover:shadow-xl cursor-pointer" 
+                 onClick={() => setCurrentPage('features')}
+                 onMouseEnter={(e) => e.currentTarget.style.borderColor = CUHK_PURPLE}
+                 onMouseLeave={(e) => e.currentTarget.style.borderColor = ''}>
+              <div style={{ backgroundColor: `${CUHK_PURPLE}10`, color: CUHK_PURPLE }} className="p-3 rounded-xl w-fit mb-6 group-hover:scale-110 transition-transform duration-300">
+                <Cpu size={24} strokeWidth={2} />
               </div>
-              <h3 className="text-2xl font-bold mb-4 text-slate-900">GPU-Native Kernels</h3>
-              <p className="text-slate-500 mb-8 leading-relaxed">
-                Optimized for NVIDIA CUDA, handling massive logic restructuring with thousands of cores.
+              <h3 className="text-xl font-bold mb-3 text-slate-900">GPU-Native Kernels</h3>
+              <p className="text-slate-500 mb-6 text-sm leading-relaxed">
+                Optimized for NVIDIA CUDA, handling massive logic restructuring.
               </p>
-              <span className="inline-flex items-center gap-2 font-bold text-blue-600 group-hover:gap-3 transition-all">
-                Technical Detail <ChevronRight size={18} />
+              <span style={{ color: CUHK_PURPLE }} className="inline-flex items-center gap-2 text-sm font-bold group-hover:gap-3 transition-all">
+                Technical Detail <ChevronRight size={16} />
               </span>
             </div>
 
-            <div className="group bg-white p-10 rounded-3xl border border-slate-200 hover:border-blue-500 transition-all duration-300 hover:shadow-2xl cursor-default">
-              <div className="bg-blue-50 p-4 rounded-2xl w-fit mb-8 text-blue-600 group-hover:scale-110 transition-transform duration-300">
-                <Layers size={32} strokeWidth={2} />
+            <div className="group bg-white p-8 rounded-2xl border border-slate-200 transition-all duration-300 hover:shadow-xl cursor-default"
+                 onMouseEnter={(e) => e.currentTarget.style.borderColor = CUHK_PURPLE}
+                 onMouseLeave={(e) => e.currentTarget.style.borderColor = ''}>
+              <div style={{ backgroundColor: `${CUHK_PURPLE}10`, color: CUHK_PURPLE }} className="p-3 rounded-xl w-fit mb-6 group-hover:scale-110 transition-transform duration-300">
+                <Layers size={24} strokeWidth={2} />
               </div>
-              <h3 className="text-2xl font-bold mb-4 text-slate-900">Modular API</h3>
-              <p className="text-slate-500 mb-8 leading-relaxed">
-                Available as a C++/Python Shared Library for custom placement or routing tool integration.
+              <h3 className="text-xl font-bold mb-3 text-slate-900">Modular API</h3>
+              <p className="text-slate-500 mb-6 text-sm leading-relaxed">
+                Available as a C++/Python Shared Library for custom integration.
               </p>
-              <span className="inline-flex items-center gap-2 font-bold text-blue-600 group-hover:gap-3 transition-all">
-                API Docs <ChevronRight size={18} />
+              <span style={{ color: CUHK_PURPLE }} className="inline-flex items-center gap-2 text-sm font-bold group-hover:gap-3 transition-all">
+                API Docs <ChevronRight size={16} />
               </span>
             </div>
           </div>
 
           <div className="w-full bg-white rounded-[2.5rem] p-10 lg:p-16 relative overflow-hidden shadow-xl border border-slate-200">
-            <div className="absolute top-0 right-0 p-12 opacity-[0.03] pointer-events-none">
-              <Trophy size={200} className="text-slate-900" />
+            <div className="absolute top-0 right-0 p-12 opacity-[0.03] pointer-events-none text-slate-900">
+              <Trophy size={200} />
             </div>
             
             <div className="relative z-10">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-[10px] font-black tracking-widest uppercase mb-8">
+              <div style={{ backgroundColor: `${CUHK_PURPLE}10`, borderColor: `${CUHK_PURPLE}20`, color: CUHK_PURPLE }} className="inline-flex items-center gap-2 px-3 py-1 rounded-full border text-[10px] font-black tracking-widest uppercase mb-8">
                 <Award size={14} /> Academic & Industrial Excellence
               </div>
               
@@ -179,8 +209,8 @@ const App = () => {
               
               <div className="grid md:grid-cols-2 gap-12">
                 <div className="space-y-6">
-                  <h4 className="text-blue-600 font-bold uppercase tracking-widest text-xs flex items-center gap-2">
-                    <Medal size={16} /> Awards
+                  <h4 style={{ color: CUHK_PURPLE }} className="font-bold uppercase tracking-widest text-xs flex items-center gap-2">
+                    <Medal size={16} /> Honors
                   </h4>
                   <ul className="space-y-6 text-slate-600">
                     <li className="flex gap-4 items-start">
@@ -188,7 +218,7 @@ const App = () => {
                       <p><span className="text-slate-900 font-bold">Best Paper Award Nomination</span>, ICCAD, 2025.</p>
                     </li>
                     <li className="flex gap-4 items-start">
-                      <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0"></div>
+                      <div className="mt-1.5 w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: CUHK_GOLD }}></div>
                       <p><span className="text-slate-900 font-bold">Best Paper Award</span>, ASP-DAC, 2024.</p>
                     </li>
                     <li className="flex gap-4 items-start">
@@ -199,7 +229,7 @@ const App = () => {
                 </div>
 
                 <div className="space-y-6">
-                  <h4 className="text-emerald-600 font-bold uppercase tracking-widest text-xs flex items-center gap-2">
+                  <h4 style={{ color: CUHK_GOLD }} className="font-bold uppercase tracking-widest text-xs flex items-center gap-2">
                     <Trophy size={16} /> Global CAD Contests
                   </h4>
                   <ul className="space-y-6 text-slate-600">
@@ -212,7 +242,7 @@ const App = () => {
                       <p><span className="text-slate-900 font-bold">Second Place</span>, ICCAD CAD Contest, 2024.</p>
                     </li>
                     <li className="flex gap-4 items-start">
-                      <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0"></div>
+                      <div className="mt-1.5 w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: CUHK_GOLD }}></div>
                       <p><span className="text-slate-900 font-bold">First Place</span>, ICCAD CAD Contest, 2021.</p>
                     </li>
                   </ul>
@@ -225,116 +255,70 @@ const App = () => {
     </>
   );
 
-  const TechView = () => (
-    <div className="w-full bg-white">
+  const FeaturesPageView = () => (
+    <div className="w-full bg-white min-h-screen">
       <section className="py-24 max-w-[1440px] mx-auto px-6">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-20 gap-6">
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-[10px] font-black tracking-widest uppercase mb-4">
-              <Microscope size={14} /> Technical Innovation
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-24">
+            <div style={{ color: CUHK_PURPLE }} className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest mb-4">
+              <Microscope size={14} /> Core Capabilities
             </div>
-            <h1 className="text-5xl md:text-6xl font-black text-slate-900 tracking-tight leading-tight">
-              Our Foundational <span className="text-blue-600">Research</span>
+            <h1 className="text-5xl md:text-7xl font-black text-slate-900 tracking-tight leading-tight mb-8">
+              Technical <span style={{ color: CUHK_PURPLE }}>Features</span>
             </h1>
-          </div>
-          <p className="text-slate-500 font-medium max-w-sm text-lg">
-            CUEDA is built upon peer-reviewed breakthroughs in parallel CAD algorithms and heterogeneous computing.
-          </p>
-        </div>
-
-        <div className="grid lg:grid-cols-2 gap-20 items-start">
-          <div className="space-y-16">
-            <div className="group">
-              <div className="flex gap-6 mb-6">
-                <div className="shrink-0 w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
-                  <Network size={32} />
-                </div>
-                <div>
-                  <h3 className="text-2xl font-bold text-slate-900 mb-2">Massive Parallel AIG Optimization</h3>
-                  <p className="text-slate-600 leading-relaxed text-lg">
-                    Utilizing a novel GPGPU-based logic rewriting engine that executes millions of local transformations in parallel without compromising sequential logic depth.
-                  </p>
-                </div>
-              </div>
-              <div className="flex flex-wrap gap-4 pl-22">
-                <div className="flex items-center gap-2 text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-100 italic">
-                  <FileCode size={14} /> Ref: ASP-DAC 2024
-                </div>
-                <div className="flex items-center gap-2 text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-100 italic">
-                  <FileCode size={14} /> Ref: DAC 2023
-                </div>
-              </div>
-            </div>
-
-            <div className="group">
-              <div className="flex gap-6 mb-6">
-                <div className="shrink-0 w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300">
-                  <Binary size={32} />
-                </div>
-                <div>
-                  <h3 className="text-2xl font-bold text-slate-900 mb-2">Heterogeneous Task Scheduling</h3>
-                  <p className="text-slate-600 leading-relaxed text-lg">
-                    Advanced dynamic load balancing between CPU and GPU clusters to minimize PCIe bottlenecking during high-effort synthesis runs.
-                  </p>
-                </div>
-              </div>
-              <div className="flex flex-wrap gap-4 pl-22">
-                <div className="flex items-center gap-2 text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-100 italic">
-                  <FileCode size={14} /> Ref: ICCAD 2025
-                </div>
-              </div>
-            </div>
-
-            <div className="p-8 bg-slate-50 rounded-3xl border border-slate-200">
-              <h4 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
-                <ExternalLink size={18} className="text-blue-600" /> Academic Publications
-              </h4>
-              <p className="text-slate-600 mb-6 leading-relaxed">
-                Explore the full library of technical papers covering GPU acceleration for Boolean Satisfiability, logic rewriting, and timing analysis.
-              </p>
-              <a 
-                href="https://tefantasy.github.io/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-slate-900 text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-slate-800 transition-all shadow-lg"
-              >
-                View Repository <ArrowRight size={16} />
-              </a>
-            </div>
+            <p className="text-xl text-slate-500 max-w-2xl leading-relaxed">
+              CUEDA leverages high-performance GPU kernels to redefine the boundaries of VLSI design synthesis.
+            </p>
           </div>
 
-          <div className="sticky top-32">
-            <div className="relative">
-              <div className="absolute -inset-10 bg-gradient-to-tr from-blue-100 to-transparent rounded-[3rem] -z-10 blur-3xl opacity-40"></div>
-              <div className="bg-white border border-slate-200 shadow-2xl rounded-[2.5rem] p-8 md:p-12">
-                <h4 className="text-slate-900 font-black mb-10 text-xl uppercase tracking-wider">Benchmark Metrics</h4>
-                <div className="space-y-10">
-                  {[
-                    { label: 'Logic Rewriting (AIG)', cpu: 100, gpu: 8.5, unit: 'ms/pass' },
-                    { label: 'Boolean Matching', cpu: 100, gpu: 4.2, unit: 'ms/pass' },
-                    { label: 'Network Balancing', cpu: 100, gpu: 12.0, unit: 'ms/pass' },
-                  ].map((item, i) => (
-                    <div key={i}>
-                      <div className="flex justify-between text-sm font-bold mb-4">
-                        <span className="text-slate-900 text-base">{item.label}</span>
-                        <span className="text-blue-600 text-base">~{(item.cpu / item.gpu).toFixed(1)}x Speedup</span>
-                      </div>
-                      <div className="h-4 bg-slate-100 rounded-full overflow-hidden flex border border-slate-200/50">
-                        <div className="h-full bg-slate-300 w-[75%]"></div>
-                        <div className="h-full bg-blue-600 w-[10%]"></div>
-                      </div>
-                      <div className="flex gap-6 mt-3 text-[10px] uppercase font-black tracking-[0.15em] text-slate-400">
-                        <span className="flex items-center gap-2"><div className="w-2.5 h-2.5 bg-slate-300 rounded-sm"></div> Legacy CPU Cluster</span>
-                        <span className="flex items-center gap-2"><div className="w-2.5 h-2.5 bg-blue-600 rounded-sm"></div> CUEDA GPU Kernel</span>
-                      </div>
-                    </div>
-                  ))}
+          <div className="grid gap-24">
+            {/* All Feature sections now move image to right and make them smaller */}
+            
+            {/* Feature 1 */}
+            <div className="flex flex-col lg:flex-row gap-12 items-center">
+              <div className="flex-grow">
+                <h2 className="text-3xl font-bold text-slate-900 mb-6">Massive Parallellism on GPUs</h2>
+                <p className="text-slate-600 text-lg leading-relaxed mb-6">
+                  Our core synthesis engine offloads logic optimization tasks to thousands of CUDA cores. By processing millions of And-Inverter Graph (AIG) nodes simultaneously, we achieve 20x-30x speedups.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <span className="bg-slate-100 text-slate-700 px-4 py-2 rounded-xl text-sm font-bold border border-slate-200">CUDA Optimized</span>
                 </div>
-                <div className="mt-12 pt-8 border-t border-slate-100">
-                  <p className="text-sm text-slate-500 italic">
-                    * Benchmarked on NVIDIA H100 vs. Dual 64-core AMD EPYC workstation using 10M+ node industrial designs.
-                  </p>
+              </div>
+              <div className="w-full lg:w-1/3 shrink-0">
+                <img src="massivepara.png" alt="Massive Parallel Optimization" className="w-full rounded-2xl border border-slate-200 shadow-sm" />
+              </div>
+            </div>
+
+            {/* Feature 2 */}
+            <div className="flex flex-col lg:flex-row gap-12 items-center">
+              <div className="flex-grow">
+                <h2 className="text-3xl font-bold text-slate-900 mb-6">Fine-grained Thread Scheduling</h2>
+                <p className="text-slate-600 text-lg leading-relaxed mb-6">
+                  CUEDA utilizes a dynamic load-balancer that intelligently partitions synthesis tasks between the CPU and the GPU, minimizing data transfer overhead.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <span className="bg-slate-100 text-slate-700 px-4 py-2 rounded-xl text-sm font-bold border border-slate-200">Dynamic Balancing</span>
                 </div>
+              </div>
+              <div className="w-full lg:w-1/3 shrink-0">
+                <img src="finegrainedschedule.png" alt="Fine-grained GPU Scheduling" className="w-full rounded-2xl border border-slate-200 shadow-sm" />
+              </div>
+            </div>
+
+            {/* Feature 3 */}
+            <div className="flex flex-col lg:flex-row gap-12 items-center">
+              <div className="flex-grow">
+                <h2 className="text-3xl font-bold text-slate-900 mb-6">Heterogeneous Parallelism Schemes</h2>
+                <p className="text-slate-600 text-lg leading-relaxed mb-6">
+                  Designed to fit into any existing CAD ecosystem, offering a C++/Python shared library interface for seamless integration into custom tools.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <span className="bg-slate-100 text-slate-700 px-4 py-2 rounded-xl text-sm font-bold border border-slate-200">Python Wrapper</span>
+                </div>
+              </div>
+              <div className="w-full lg:w-1/3 shrink-0">
+                <img src="heteroparallel.png" alt="Heterogeneous Parallelism" className="w-full rounded-2xl border border-slate-200 shadow-sm" />
               </div>
             </div>
           </div>
@@ -350,7 +334,7 @@ const App = () => {
           onClick={() => setIsSidebarOpen(true)}
           className="flex items-center gap-2 bg-white/60 backdrop-blur-lg hover:bg-white/80 text-slate-900 p-3 rounded-xl font-bold text-sm border border-white/50 shadow-lg transition-all active:scale-95 group"
         >
-          <PanelLeftOpen size={20} className="text-blue-600" />
+          <PanelLeftOpen size={20} style={{ color: CUHK_PURPLE }} />
         </button>
       </div>
 
@@ -366,7 +350,7 @@ const App = () => {
       `}>
         <div className="flex items-center justify-between mb-10 md:hidden">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white">
+            <div style={{ backgroundColor: CUHK_PURPLE }} className="w-8 h-8 rounded-lg flex items-center justify-center text-white">
               <Book size={18} />
             </div>
             <span className="font-black text-xl tracking-tighter">Contents</span>
@@ -380,7 +364,7 @@ const App = () => {
           <div>
             <h4 className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 mb-6 flex items-center gap-2">Getting Started</h4>
             <ul className="space-y-4 text-sm font-semibold text-slate-500">
-              <li className="text-blue-600 cursor-pointer flex items-center justify-between group">Quickstart Guide <ChevronRight size={14} /></li>
+              <li style={{ color: CUHK_PURPLE }} className="cursor-pointer flex items-center justify-between group font-bold">Quickstart Guide <ChevronRight size={14} /></li>
               <li className="hover:text-slate-900 cursor-pointer transition-colors">Installation</li>
               <li className="hover:text-slate-900 cursor-pointer transition-colors">Running CLI</li>
             </ul>
@@ -388,8 +372,8 @@ const App = () => {
           <div>
             <h4 className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 mb-6 flex items-center gap-2">Core Concepts</h4>
             <ul className="space-y-4 text-sm font-semibold text-slate-500">
-              <li className="hover:text-slate-900 cursor-pointer transition-colors">Logic Balance</li>
-              <li className="hover:text-slate-900 cursor-pointer transition-colors">Logic Rewriting</li>
+              <li style={{ color: CUHK_GOLD }} className="hover:opacity-80 cursor-pointer transition-colors">Logic Balance</li>
+              <li style={{ color: CUHK_GOLD }} className="hover:opacity-80 cursor-pointer transition-colors">Logic Rewriting</li>
             </ul>
           </div>
         </div>
@@ -397,17 +381,17 @@ const App = () => {
 
       <article className="flex-grow max-w-3xl prose prose-slate">
         <div className="mb-12">
-          <div className="flex items-center gap-2 text-blue-600 text-xs font-bold uppercase tracking-widest mb-4">
+          <div style={{ color: CUHK_PURPLE }} className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest mb-4">
             <Book size={14} /> Documentation
           </div>
           <h1 className="text-5xl font-black text-slate-900 mb-6 tracking-tight leading-tight">Quickstart Guide</h1>
           <p className="text-xl text-slate-500 leading-relaxed font-medium">Deploy GPU-accelerated logic synthesis environment in under 5 minutes.</p>
         </div>
-        <div className="p-8 bg-slate-900 rounded-2xl text-blue-400 font-mono text-sm mb-12 shadow-2xl border border-slate-800">
+        <div className="p-8 bg-slate-900 rounded-2xl font-mono text-sm mb-12 shadow-2xl border border-slate-800">
           <span className="text-slate-500"># Install the CUEDA core package</span><br/>
-          <span className="text-emerald-400 font-bold">pip</span> install cueda-eda<br/><br/>
+          <span style={{ color: CUHK_GOLD }} className="font-bold">pip</span> <span className="text-white">install cueda-eda</span><br/><br/>
           <span className="text-slate-500"># Verify GPU acceleration</span><br/>
-          cueda --check-gpu
+          <span className="text-white">cueda --check-gpu</span>
         </div>
         <h2 className="text-3xl font-bold text-slate-900 mb-6 tracking-tight">Standard Workflow</h2>
         <p className="text-slate-600 text-lg leading-relaxed mb-8">CUEDA replaces the synthesis stage in your standard CAD flow.</p>
@@ -416,16 +400,16 @@ const App = () => {
   );
 
   return (
-    <div className="min-h-screen font-sans text-slate-900 bg-slate-50 flex flex-col w-full selection:bg-blue-200">
+    <div className="min-h-screen font-sans text-slate-900 bg-slate-50 flex flex-col w-full selection:bg-purple-100">
       <Nav />
       <main className="w-full flex-grow">
         {currentPage === 'home' && <HomeView />}
-        {currentPage === 'technology' && <TechView />}
+        {currentPage === 'features' && <FeaturesPageView />}
         {currentPage === 'docs' && <DocsView />}
       </main>
       <footer className="w-full bg-white text-slate-400 py-16 border-t border-slate-200">
         <div className="max-w-[1440px] mx-auto px-6 flex flex-col items-center gap-6">
-          <span className="text-xl font-black tracking-tighter text-slate-900">CU<span className="text-blue-600">EDA</span></span>
+          <span className="text-xl font-black tracking-tighter text-slate-900 uppercase">CU<span style={{ color: CUHK_GOLD }}>EDA</span></span>
           <p className="text-xs font-bold uppercase tracking-[0.3em]">© 2025 CUEDA Limited</p>
         </div>
       </footer>
