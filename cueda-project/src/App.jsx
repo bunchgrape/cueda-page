@@ -143,10 +143,9 @@ const App = () => {
         </div>
       </header>
 
-      <section className="w-full pt-20 pb-20 bg-slate-50">
+      <section className="w-full pt-10 pb-10 bg-slate-50">
         <div className="max-w-[1440px] mx-auto px-6">
-          {/* Tighter grid for the feature blocks */}
-          <div className="max-w-5xl mx-auto grid lg:grid-cols-3 gap-6 mb-20">
+          <div className="grid lg:grid-cols-3 gap-10 mb-24">
             <div className="group bg-white p-8 rounded-2xl border border-slate-200 transition-all duration-300 hover:shadow-xl relative overflow-hidden cursor-pointer" 
                  onClick={() => setCurrentPage('docs')}
                  onMouseEnter={(e) => e.currentTarget.style.borderColor = CUHK_PURPLE}
