@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   Zap, 
   Cpu, 
@@ -18,7 +18,9 @@ import {
   Binary,
   FileCode,
   ArrowRight,
-  Maximize2
+  Maximize2,
+  Menu,
+  ChevronDown
 } from 'lucide-react';
 
 /**
@@ -46,8 +48,26 @@ const App = () => {
     }
   }, [isSidebarOpen]);
 
+  // Helper to scroll to section
+  const scrollToSection = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+      const offset = 100; // Account for sticky nav
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = element.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+      setIsSidebarOpen(false);
+    }
+  };
+
   const Nav = () => (
-    <nav className="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-md border-b border-slate-200">
+    <nav className="sticky top-0 z-40 w-full bg-white/10 backdrop-blur-md border-b border-slate-200">
       <div className="max-w-[1440px] mx-auto px-6 h-16 flex items-center justify-between">
         <div className="flex items-center gap-8">
           <button onClick={() => setCurrentPage('home')} className="text-2xl font-black tracking-tighter flex items-center text-slate-900 cursor-pointer outline-none hover:opacity-80 transition uppercase">
@@ -258,27 +278,12 @@ const App = () => {
     <div className="w-full bg-white min-h-screen">
       <section className="py-24 max-w-[1440px] mx-auto px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="mb-24">
-            <div style={{ color: CUHK_PURPLE }} className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest mb-4">
-              <Microscope size={14} /> Core Capabilities
-            </div>
-            <h1 className="text-5xl md:text-7xl font-black text-slate-900 tracking-tight leading-tight mb-8">
-              Technical <span style={{ color: CUHK_PURPLE }}>Features</span>
-            </h1>
-            <p className="text-xl text-slate-500 max-w-2xl leading-relaxed">
-              CUEDA leverages high-performance GPU kernels to redefine the boundaries of VLSI design synthesis.
-            </p>
-          </div>
-
           <div className="grid gap-24">
-            {/* All Feature sections now move image to right and make them smaller */}
-            
-            {/* Feature 1 */}
             <div className="flex flex-col lg:flex-row gap-12 items-center">
               <div className="flex-grow">
                 <h2 className="text-3xl font-bold text-slate-900 mb-6">Massive Parallellism on GPUs</h2>
                 <p className="text-slate-600 text-lg leading-relaxed mb-6">
-                  Our core synthesis engine offloads logic optimization tasks to thousands of CUDA cores. By processing millions of And-Inverter Graph (AIG) nodes simultaneously, we achieve 20x-30x speedups.
+                  Our core synthesis engine offloads logic optimization tasks to thousands of CUDA cores. By processing millions of And-Inverter Graph (AIG) nodes simultaneously, we achieve up to 100x speedups on extremely large circuits.
                 </p>
                 <div className="flex flex-wrap gap-3">
                   <span className="bg-slate-100 text-slate-700 px-4 py-2 rounded-xl text-sm font-bold border border-slate-200">CUDA Optimized</span>
@@ -289,15 +294,14 @@ const App = () => {
               </div>
             </div>
 
-            {/* Feature 2 */}
             <div className="flex flex-col lg:flex-row gap-12 items-center">
               <div className="flex-grow">
                 <h2 className="text-3xl font-bold text-slate-900 mb-6">Fine-grained Thread Scheduling</h2>
                 <p className="text-slate-600 text-lg leading-relaxed mb-6">
-                  CUEDA utilizes a dynamic load-balancer that intelligently partitions synthesis tasks between the CPU and the GPU, minimizing data transfer overhead.
+                  Fine-grained thread scheduling for each logic operator enumerates more optimization opportunities.
                 </p>
                 <div className="flex flex-wrap gap-3">
-                  <span className="bg-slate-100 text-slate-700 px-4 py-2 rounded-xl text-sm font-bold border border-slate-200">Dynamic Balancing</span>
+                  <span className="bg-slate-100 text-slate-700 px-4 py-2 rounded-xl text-sm font-bold border border-slate-200">Fine-grained Scheduling</span>
                 </div>
               </div>
               <div className="w-full lg:w-1/3 shrink-0">
@@ -305,15 +309,14 @@ const App = () => {
               </div>
             </div>
 
-            {/* Feature 3 */}
             <div className="flex flex-col lg:flex-row gap-12 items-center">
               <div className="flex-grow">
                 <h2 className="text-3xl font-bold text-slate-900 mb-6">Heterogeneous Parallelism Schemes</h2>
                 <p className="text-slate-600 text-lg leading-relaxed mb-6">
-                  Designed to fit into any existing CAD ecosystem, offering a C++/Python shared library interface for seamless integration into custom tools.
+                  Parallellism on heterogeneous levels ensures global and local optimization.
                 </p>
                 <div className="flex flex-wrap gap-3">
-                  <span className="bg-slate-100 text-slate-700 px-4 py-2 rounded-xl text-sm font-bold border border-slate-200">Python Wrapper</span>
+                  <span className="bg-slate-100 text-slate-700 px-4 py-2 rounded-xl text-sm font-bold border border-slate-200">Multi-Dimension</span>
                 </div>
               </div>
               <div className="w-full lg:w-1/3 shrink-0">
@@ -326,77 +329,140 @@ const App = () => {
     </div>
   );
 
-  const DocsView = () => (
-    <div className="max-w-[1440px] mx-auto px-6 py-12 flex gap-12 w-full min-h-screen relative">
-      <div className="fixed top-20 left-6 z-50 md:hidden">
-        <button 
-          onClick={() => setIsSidebarOpen(true)}
-          className="flex items-center gap-2 bg-white/60 backdrop-blur-lg hover:bg-white/80 text-slate-900 p-3 rounded-xl font-bold text-sm border border-white/50 shadow-lg transition-all active:scale-95 group"
-        >
-          <PanelLeftOpen size={20} style={{ color: CUHK_PURPLE }} />
-        </button>
-      </div>
+  const DocsView = () => {
+    const docSections = [
+      { 
+        id: 'optimization', 
+        title: 'Logic Optimization', 
+        commands: [
+          { cmd: 'balance', desc: 'Reduces the depth of the AIG by tree-balancing. Offloaded to GPU via parallel level-order traversal.' },
+          { cmd: 'rewrite', desc: 'Performs local AIG rewriting by finding smaller subgraphs in a pre-computed database.' },
+          { cmd: 'refactor', desc: 'Iteratively collapses and re-synthesizes logic cones to reduce node count.' },
+          { cmd: 'resub', desc: 'Logic resubstitution: expresses a node as a function of existing nodes in the circuit.' },
+          { cmd: 'strash', desc: 'Structural hashing: transforms the circuit into an AIG with one-level functional reduction.' },
+          { cmd: 'recopt', desc: 'Recursive optimization: combines rewriting and refactoring for deep logic compression.' }
+        ]
+      },
+      { 
+        id: 'mapping', 
+        title: 'Mapping & Verification', 
+        commands: [
+          { cmd: 'lutmap', desc: 'FPGA-style technology mapping. Computes optimal K-LUT covers using parallel area/delay cuts.' },
+          { cmd: 'scmap', desc: 'Standard cell mapping. Matches technology-independent AIGs against target library gates.' },
+          { cmd: 'cec', desc: 'Combinational Equivalence Checking. Proves identity between two circuits using SAT-based GPU kernels.' }
+        ]
+      },
+      { 
+        id: 'timing', 
+        title: 'Timing', 
+        commands: [
+          { cmd: 'sta', desc: 'Static Timing Analysis. GPU-accelerated arrival/required time propagation and slack calculation.' },
+          { cmd: 'report_timing', desc: 'Report global timing information and critical path of the circuit.' },
+          { cmd: 'sizing', desc: 'Performs gate sizing to fix timing violations.' },
+          { cmd: 'bf', desc: 'Inserts and optimizes buffer trees to fix high-fanout nets and hold/setup violations.' }
+        ]
+      }
+    ];
 
-      {isSidebarOpen && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[60] md:hidden" onClick={() => setIsSidebarOpen(false)} />
-      )}
-
-      <aside className={`
-        fixed inset-y-0 left-0 z-[70] bg-white w-72 p-8 border-r border-slate-200 
-        transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] transform
-        md:relative md:translate-x-0 md:bg-transparent md:border-none md:p-0 md:w-64 md:z-auto md:block
-        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-      `}>
-        <div className="flex items-center justify-between mb-10 md:hidden">
-          <div className="flex items-center gap-2">
-            <div style={{ backgroundColor: CUHK_PURPLE }} className="w-8 h-8 rounded-lg flex items-center justify-center text-white">
-              <Book size={18} />
-            </div>
-            <span className="font-black text-xl tracking-tighter">Contents</span>
-          </div>
-          <button onClick={() => setIsSidebarOpen(false)} className="p-2 hover:bg-slate-100 rounded-full text-slate-400 transition-colors">
-            <X size={20} />
+    return (
+      <div className="max-w-[1440px] mx-auto px-6 py-12 flex flex-col md:flex-row gap-12 w-full min-h-screen relative">
+        {/* Mobile Sidebar Toggle */}
+        <div className="fixed top-20 left-6 z-50 md:hidden">
+          <button 
+            onClick={() => setIsSidebarOpen(true)}
+            className="flex items-center gap-2 bg-white/60 backdrop-blur-lg hover:bg-white/80 text-slate-900 p-3 rounded-xl font-bold text-sm border border-white/50 shadow-lg transition-all active:scale-95 group"
+          >
+            <PanelLeftOpen size={20} className="text-[${CUHK_PURPLE}]" />
           </button>
         </div>
 
-        <div className="space-y-10 md:sticky md:top-28">
-          <div>
-            <h4 className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 mb-6 flex items-center gap-2">Getting Started</h4>
-            <ul className="space-y-4 text-sm font-semibold text-slate-500">
-              <li style={{ color: CUHK_PURPLE }} className="cursor-pointer flex items-center justify-between group font-bold">Quickstart Guide <ChevronRight size={14} /></li>
-              <li className="hover:text-slate-900 cursor-pointer transition-colors">Installation</li>
-              <li className="hover:text-slate-900 cursor-pointer transition-colors">Running CLI</li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 mb-6 flex items-center gap-2">Core Concepts</h4>
-            <ul className="space-y-4 text-sm font-semibold text-slate-500">
-              <li style={{ color: CUHK_GOLD }} className="hover:opacity-80 cursor-pointer transition-colors">Logic Balance</li>
-              <li style={{ color: CUHK_GOLD }} className="hover:opacity-80 cursor-pointer transition-colors">Logic Rewriting</li>
-            </ul>
-          </div>
-        </div>
-      </aside>
+        {isSidebarOpen && (
+          <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[60] md:hidden" onClick={() => setIsSidebarOpen(false)} />
+        )}
 
-      <article className="flex-grow max-w-3xl prose prose-slate">
-        <div className="mb-12">
-          <div style={{ color: CUHK_PURPLE }} className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest mb-4">
-            <Book size={14} /> Documentation
+        <aside className={`
+          fixed inset-y-0 left-0 z-[70] bg-white w-72 p-8 border-r border-slate-200 
+          transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] transform
+          md:relative md:translate-x-0 md:bg-transparent md:border-none md:p-0 md:w-64 md:z-auto md:block
+          ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+        `}>
+          <div className="sticky top-28 space-y-8">
+            <div>
+              <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-6">Getting Started</h4>
+              <ul className="space-y-2 text-sm font-semibold">
+                {docSections.map(section => (
+                  <li key={section.id}>
+                    <button 
+                      onClick={() => scrollToSection(section.id)}
+                      className="text-slate-500 hover:text-slate-900 hover:translate-x-1 transition-all flex items-center gap-2 py-1 w-full text-left"
+                    >
+                      <ChevronRight size={14} />
+                      {section.title}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            
+            {/* <div className="p-4 rounded-xl bg-slate-100 border border-slate-200">
+              <p className="text-[10px] text-slate-400 font-bold uppercase mb-2">Pro Tip</p>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Use <code className="text-slate-900 font-bold">help &lt;cmd&gt;</code> in the shell for detailed parameter documentation.
+              </p>
+            </div> */}
           </div>
-          <h1 className="text-5xl font-black text-slate-900 mb-6 tracking-tight leading-tight">Quickstart Guide</h1>
-          <p className="text-xl text-slate-500 leading-relaxed font-medium">Deploy GPU-accelerated logic synthesis environment in under 5 minutes.</p>
-        </div>
-        <div className="p-8 bg-slate-900 rounded-2xl font-mono text-sm mb-12 shadow-2xl border border-slate-800">
-          <span className="text-slate-500"># Install the CUEDA core package</span><br/>
-          <span style={{ color: CUHK_GOLD }} className="font-bold">pip</span> <span className="text-white">install cueda-eda</span><br/><br/>
-          <span className="text-slate-500"># Verify GPU acceleration</span><br/>
-          <span className="text-white">cueda --check-gpu</span>
-        </div>
-        <h2 className="text-3xl font-bold text-slate-900 mb-6 tracking-tight">Standard Workflow</h2>
-        <p className="text-slate-600 text-lg leading-relaxed mb-8">CUEDA replaces the synthesis stage in your standard CAD flow.</p>
-      </article>
-    </div>
-  );
+        </aside>
+
+        <article className="flex-grow max-w-3xl prose prose-slate">
+          <div className="mb-16">
+            <div style={{ color: CUHK_PURPLE }} className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest mb-4">
+              <Terminal size={14} /> Documentation
+            </div>
+            <h1 className="text-4xl font-black text-slate-900 mb-6 tracking-tight">GPU-Accelerated Operator Commands</h1>
+            <p className="text-xl text-slate-600 leading-relaxed font-medium">
+              CUEDA implements a high-performance library of logic synthesis operators with massive GPU acceleration.
+            </p>
+          </div>
+
+          <div className="space-y-6">
+            {docSections.map(section => (
+              <section key={section.id} id={section.id} className="scroll-mt-28">
+                <h3 className="text-2xl font-black text-slate-900 border-b-4 w-fit pb-2 mb-8" style={{ borderColor: section.id === 'optimization' ? CUHK_PURPLE : section.id === 'mapping' ? CUHK_PURPLE : CUHK_PURPLE }}>
+                  {section.title}
+                </h3>
+                <div className="grid gap-3">
+                  {section.commands.map(item => (
+                    <div key={item.cmd} className="group flex flex-col sm:flex-row gap-4 p-3 rounded-2xl bg-white border border-slate-200 transition-all hover:shadow-md hover:border-slate-300">
+                      <div className="shrink-0">
+                        <code className={`font-mono font-bold px-3 py-1 rounded-lg text-sm transition-colors ${
+                          section.id === 'optimization' ? 'bg-slate-50 text-black-600' : 
+                          section.id === 'mapping' ? 'bg-slate-50 text-black-600' : 
+                          'bg-slate-50 text-black-600'
+                        }`}>
+                          {item.cmd}
+                        </code>
+                      </div>
+                      <div className="flex-grow">
+                        <p className="text-slate-600 text-sm leading-relaxed">{item.desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            ))}
+          </div>
+
+          {/* Footer of the article */}
+          {/* <div className="mt-24 pt-12 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-6">
+            <div className="text-sm text-slate-400 italic">Last updated: Oct 2025</div>
+            <button className="flex items-center gap-2 text-sm font-bold text-slate-900 hover:gap-3 transition-all">
+              View API Documentation <ExternalLink size={16} />
+            </button>
+          </div> */}
+        </article>
+      </div>
+    );
+  };
 
   return (
     <div className="min-h-screen font-sans text-slate-900 bg-slate-50 flex flex-col w-full selection:bg-purple-100">
