@@ -9,7 +9,25 @@
     <!-- <script src="https://cdn.tailwindcss.com"></script> -->
   </head>
   <body>
+    <!-- 
+      NETLIFY FORM DETECTION BLOCK
+      This hidden form allows Netlify to 'see' the form at build time.
+      The fields here must match the 'name' attributes in your React App.jsx.
+    -->
+    <form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
+        <input type="text" name="name" />
+        <input type="email" name="email" />
+        <input type="text" name="affiliation" />
+        <input type="text" name="bot-field" />
+    </form>
+
     <div id="root"></div>
+    
+    <script type="text/babel">
+      // Import the App component if it's in the same scope or 
+      // rely on the build process to inject it into #root.
+      // For the sake of this file, we assume App is rendered here.
+    </script>
     <script type="module" src="./src/main.jsx"></script>
   </body>
 </html>

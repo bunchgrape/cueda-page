@@ -20,13 +20,16 @@ import {
   ArrowRight,
   Maximize2,
   Menu,
-  ChevronDown
+  ChevronDown,
+  Mail,
+  Building,
+  User,
+  CheckCircle2,
+  Loader2
 } from 'lucide-react';
 
 /**
  * CUHK Color Palette Constants
- * Primary Purple: #532E74
- * Accent Gold: #B98336
  */
 const CUHK_PURPLE = '#532E74';
 const CUHK_GOLD = '#B98336';
@@ -34,6 +37,12 @@ const CUHK_GOLD = '#B98336';
 const App = () => {
   const [currentPage, setCurrentPage] = useState('home');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
+  
+  // Form State
+  const [formData, setFormData] = useState({ name: '', email: '', affiliation: '', 'bot-field': '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -41,30 +50,67 @@ const App = () => {
   }, [currentPage]);
 
   useEffect(() => {
-    if (isSidebarOpen) {
+    if (isSidebarOpen || isDemoModalOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
     }
-  }, [isSidebarOpen]);
+  }, [isSidebarOpen, isDemoModalOpen]);
 
-  // Helper to scroll to section
+  // Helper to encode form data for Netlify
+  const encode = (data) => {
+    return Object.keys(data)
+      .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
+      .join("&");
+  }
+
+  const handleDemoSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    try {
+      // Netlify specific POST request
+      // Note: action is explicitly "/" to match the Netlify expected endpoint
+      await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: encode({ 
+          "form-name": "contact", 
+          ...formData 
+        })
+      });
+
+      setIsSubmitting(false);
+      setIsSubmitted(true);
+      
+      // Reset form after success
+      setTimeout(() => {
+        setIsDemoModalOpen(false);
+        setIsSubmitted(false);
+        setFormData({ name: '', email: '', affiliation: '', 'bot-field': '' });
+      }, 3000);
+    } catch (error) {
+      console.error("Form submission error:", error);
+      setIsSubmitting(false);
+    }
+  };
+
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
     if (element) {
-      const offset = 100; // Account for sticky nav
+      const offset = 100;
       const bodyRect = document.body.getBoundingClientRect().top;
       const elementRect = element.getBoundingClientRect().top;
       const elementPosition = elementRect - bodyRect;
       const offsetPosition = elementPosition - offset;
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
+      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
       setIsSidebarOpen(false);
     }
   };
+
+  // --- VIEW FUNCTIONS ---
+  // Using {Nav()} instead of <Nav /> to prevent re-mounting and cursor loss
 
   const Nav = () => (
     <nav className="sticky top-0 z-40 w-full bg-white/10 backdrop-blur-md border-b border-slate-200">
@@ -76,14 +122,14 @@ const App = () => {
           <div className="hidden md:flex gap-6 text-sm font-semibold text-slate-600">
             <button 
               onClick={() => setCurrentPage('features')} 
-              className={`transition-colors hover:text-[${CUHK_PURPLE}] ${currentPage === 'features' ? `text-[${CUHK_PURPLE}]` : ''}`}
+              className={`transition-colors hover:opacity-70`}
               style={{ color: currentPage === 'features' ? CUHK_PURPLE : undefined }}
             >
               Features
             </button>
             <button 
               onClick={() => setCurrentPage('docs')} 
-              className={`transition-colors hover:text-[${CUHK_PURPLE}] ${currentPage === 'docs' ? `text-[${CUHK_PURPLE}]` : ''}`}
+              className={`transition-colors hover:opacity-70`}
               style={{ color: currentPage === 'docs' ? CUHK_PURPLE : undefined }}
             >
               Documentation
@@ -92,6 +138,7 @@ const App = () => {
         </div>
         <div className="flex items-center gap-4">
           <button 
+            onClick={() => setIsDemoModalOpen(true)}
             style={{ backgroundColor: CUHK_PURPLE }}
             className="hidden sm:block hover:opacity-90 text-white px-5 py-2 rounded-md text-sm font-bold transition shadow-lg shadow-purple-900/10"
           >
@@ -102,6 +149,110 @@ const App = () => {
     </nav>
   );
 
+  const DemoModal = () => (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={() => setIsDemoModalOpen(false)}></div>
+      <div className="relative bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
+        <div className="p-8">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">Request <span style={{ color: CUHK_GOLD }}>Demo</span></h2>
+            <button onClick={() => setIsDemoModalOpen(false)} className="p-2 hover:bg-slate-100 rounded-full transition-colors">
+              <X size={20} />
+            </button>
+          </div>
+
+          {isSubmitted ? (
+            <div className="py-12 text-center space-y-4 animate-in slide-in-from-bottom-4 duration-500">
+              <div className="flex justify-center text-emerald-500">
+                <CheckCircle2 size={64} />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900">Request Sent!</h3>
+              <p className="text-slate-500">We will contact you shortly at {formData.email}.</p>
+            </div>
+          ) : (
+            /* Updated form for Netlify with Honeypot and Action */
+            <form 
+              name="contact" 
+              method="POST" 
+              action="/"
+              data-netlify="true" 
+              data-netlify-honeypot="bot-field"
+              onSubmit={handleDemoSubmit} 
+              className="space-y-4"
+            >
+              {/* Required for Netlify JS integration */}
+              <input type="hidden" name="form-name" value="contact" />
+              
+              {/* Honeypot field for spam prevention */}
+              <p className="hidden">
+                <label>Don't fill this out if you're human: 
+                  <input name="bot-field" onChange={(e) => setFormData(prev => ({...prev, 'bot-field': e.target.value}))} />
+                </label>
+              </p>
+              
+              <div className="space-y-1">
+                <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Name</label>
+                <div className="relative">
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                  <input 
+                    required
+                    name="name"
+                    type="text"
+                    placeholder="Name"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 pl-10 pr-4 outline-none focus:ring-2 focus:ring-purple-100 focus:border-purple-300 transition-all"
+                    value={formData.name}
+                    onChange={(e) => setFormData(prev => ({...prev, name: e.target.value}))}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Email Address</label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                  <input 
+                    required
+                    name="email"
+                    type="email"
+                    placeholder="name@affiliation.com"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 pl-10 pr-4 outline-none focus:ring-2 focus:ring-purple-100 focus:border-purple-300 transition-all"
+                    value={formData.email}
+                    onChange={(e) => setFormData(prev => ({...prev, email: e.target.value}))}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Affiliation</label>
+                <div className="relative">
+                  <Building className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                  <input 
+                    required
+                    name="affiliation"
+                    type="text"
+                    placeholder="Affiliation"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 pl-10 pr-4 outline-none focus:ring-2 focus:ring-purple-100 focus:border-purple-300 transition-all"
+                    value={formData.affiliation}
+                    onChange={(e) => setFormData(prev => ({...prev, affiliation: e.target.value}))}
+                  />
+                </div>
+              </div>
+
+              <button 
+                disabled={isSubmitting}
+                type="submit"
+                style={{ backgroundColor: CUHK_PURPLE }}
+                className="w-full text-white font-bold py-4 rounded-xl mt-4 shadow-lg shadow-purple-900/20 hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+              >
+                {isSubmitting ? <Loader2 className="animate-spin" size={20} /> : "Submit Request"}
+              </button>
+            </form>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+
   const HomeView = () => (
     <>
       <header className="relative w-full py-24 bg-white overflow-hidden border-b border-slate-200 flex justify-center">
@@ -110,25 +261,18 @@ const App = () => {
         </div>
         <div className="max-w-[1440px] mx-auto px-6 relative z-10 grid lg:grid-cols-2 gap-16 items-center">
           <div>
-            <div 
-              style={{ backgroundColor: `${CUHK_PURPLE}10`, borderColor: `${CUHK_PURPLE}20`, color: CUHK_PURPLE }}
-              className="inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-bold mb-6 tracking-widest uppercase"
-            >
+            <div style={{ backgroundColor: `${CUHK_PURPLE}10`, borderColor: `${CUHK_PURPLE}20`, color: CUHK_PURPLE }} className="inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-bold mb-6 tracking-widest uppercase">
               <Zap size={14} fill="currentColor" /> GPU-Accelerated Logic Synthesis
             </div>
             <h1 className="text-5xl lg:text-5xl font-extrabold text-slate-900 leading-[1.05] mb-6 tracking-tight">
-              Accelerate Circuit Design with <span style={{ color: CUHK_PURPLE }}>GPU-Acceleration</span>
+              Boost Circuit Design with <span style={{ color: CUHK_PURPLE }}>GPU-Acceleration</span>
             </h1>
             <p className="text-xl text-slate-600 mb-10 max-w-xl leading-relaxed">
-              CUEDA delivers the industry's fastest VLSI logic synthesis turnaround time by offloading operators to the GPU, matching industry Quality of Results (QoR) at 20x speeds.
+              CUEDA delivers the industry's fastest VLSI logic synthesis turnaround time by offloading operators to the GPU, matching industry Quality of Results (QoR) at 50x speeds.
             </p>
             <div className="flex flex-wrap gap-4">
-              <button 
-                onClick={() => setCurrentPage('features')} 
-                style={{ backgroundColor: CUHK_PURPLE }}
-                className="hover:opacity-90 text-white px-8 py-4 rounded-md font-bold text-lg flex items-center gap-2 transition transform active:scale-95 shadow-xl shadow-purple-900/20"
-              >
-                Explore Features <ChevronRight size={20} />
+              <button onClick={() => setIsDemoModalOpen(true)} style={{ backgroundColor: CUHK_PURPLE }} className="hover:opacity-90 text-white px-8 py-4 rounded-md font-bold text-lg flex items-center gap-2 transition transform active:scale-95 shadow-xl shadow-purple-900/20">
+                Request Demo <ChevronRight size={20} />
               </button>
               <button onClick={() => setCurrentPage('docs')} className="bg-white hover:bg-slate-50 text-slate-900 px-8 py-4 rounded-md font-bold text-lg flex items-center gap-2 transition border border-slate-200 shadow-sm">
                 Documentation
@@ -143,16 +287,16 @@ const App = () => {
                 <div className="w-3 h-3 rounded-full bg-slate-300"></div>
                 <span className="text-slate-400 ml-2 text-xs">cueda_shell</span>
               </div>
-              <p className="text-slate-400">cueda&gt; read_hdl -v2k design.v</p>
+              <p className="text-slate-400">cueda&gt; read_hdl -sv design.v</p>
               <p className="text-slate-400">cueda&gt; elaborate</p>
               <p className="text-slate-600 font-bold">cueda&gt; syn -effort high</p>
-              <p className="text-blue-600">[INFO] Dispatching 2.4M nodes to GPU...</p>
+              <p className="text-blue-600">[INFO] Dispatching 24M nodes to GPU...</p>
               <p className="text-emerald-600 font-bold">[SUCCESS] Synthesis complete, Overall Runtime: 10.00s</p>
             </div>
             <div className="mt-4 grid grid-cols-2 gap-4">
               <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
                 <div className="text-[10px] text-slate-400 font-black mb-1">Runtime Speedup</div>
-                <div className="text-2xl font-black text-blue-600">30x</div>
+                <div className="text-2xl font-black text-blue-600">50x</div>
               </div>
               <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
                 <div className="text-[10px] text-slate-400 font-black mb-1">QoR Variance</div>
@@ -165,9 +309,8 @@ const App = () => {
 
       <section className="w-full pt-10 pb-10 bg-slate-50">
         <div className="max-w-[1440px] mx-auto px-6">
-          <div className="grid lg:grid-cols-3 gap-10 mb-24">
+          <div className="grid lg:grid-cols-3 gap-10 mb-8">
             <div className="group bg-white p-8 rounded-2xl border border-slate-200 transition-all duration-300 hover:shadow-xl relative overflow-hidden cursor-pointer" 
-                 onClick={() => setCurrentPage('docs')}
                  onMouseEnter={(e) => e.currentTarget.style.borderColor = CUHK_PURPLE}
                  onMouseLeave={(e) => e.currentTarget.style.borderColor = ''}>
               <div style={{ backgroundColor: `${CUHK_PURPLE}10`, color: CUHK_PURPLE }} className="p-3 rounded-xl w-fit mb-6 group-hover:scale-110 transition-transform duration-300">
@@ -177,9 +320,9 @@ const App = () => {
               <p className="text-slate-500 mb-6 text-sm leading-relaxed">
                 Real-time QoR evaluation directly in your editor as you code RTL.
               </p>
-              <span style={{ color: CUHK_PURPLE }} className="inline-flex items-center gap-2 text-sm font-bold group-hover:gap-3 transition-all">
-                Marketplace <ChevronRight size={16} />
-              </span>
+              <a style={{ color: CUHK_PURPLE }} href="https://marketplace.visualstudio.com/items?itemName=CUEDA.CUEDA-extension" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-sm font-bold group-hover:gap-3 transition-all">
+                Marketplace <ChevronRight size={18} />
+              </a>
             </div>
 
             <div className="group bg-white p-8 rounded-2xl border border-slate-200 transition-all duration-300 hover:shadow-xl cursor-pointer" 
@@ -189,28 +332,31 @@ const App = () => {
               <div style={{ backgroundColor: `${CUHK_PURPLE}10`, color: CUHK_PURPLE }} className="p-3 rounded-xl w-fit mb-6 group-hover:scale-110 transition-transform duration-300">
                 <Cpu size={24} strokeWidth={2} />
               </div>
-              <h3 className="text-xl font-bold mb-3 text-slate-900">GPU-Native Kernels</h3>
+              <h3 className="text-xl font-bold mb-3 text-slate-900">Ultra-fast GPU-Native Kernels</h3>
               <p className="text-slate-500 mb-6 text-sm leading-relaxed">
-                Optimized for NVIDIA CUDA, handling massive logic restructuring.
+                Optimized for NVIDIA CUDA, handling massive logic optimization.
               </p>
-              <span style={{ color: CUHK_PURPLE }} className="inline-flex items-center gap-2 text-sm font-bold group-hover:gap-3 transition-all">
-                Technical Detail <ChevronRight size={16} />
-              </span>
+              <a style={{ color: CUHK_PURPLE }} className="inline-flex items-center gap-2 text-sm font-bold group-hover:gap-3 transition-all">
+                Details <ChevronRight size={18} />
+              </a>
             </div>
 
             <div className="group bg-white p-8 rounded-2xl border border-slate-200 transition-all duration-300 hover:shadow-xl cursor-default"
                  onMouseEnter={(e) => e.currentTarget.style.borderColor = CUHK_PURPLE}
                  onMouseLeave={(e) => e.currentTarget.style.borderColor = ''}>
-              <div style={{ backgroundColor: `${CUHK_PURPLE}10`, color: CUHK_PURPLE }} className="p-3 rounded-xl w-fit mb-6 group-hover:scale-110 transition-transform duration-300">
+              {/* <div style={{ backgroundColor: `${CUHK_PURPLE}10`, color: CUHK_PURPLE }} className="p-3 rounded-xl w-fit mb-6 group-hover:scale-110 transition-transform duration-300">
                 <Layers size={24} strokeWidth={2} />
+              </div> */}
+              <div class="text-cuhk-gold mb-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke={CUHK_PURPLE} stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5v2m6-2v2"/>
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke={CUHK_PURPLE}/>
+                  </svg>
               </div>
-              <h3 className="text-xl font-bold mb-3 text-slate-900">Modular API</h3>
+              <h3 className="text-xl font-bold mb-3 text-slate-900">Industry Matching Performance</h3>
               <p className="text-slate-500 mb-6 text-sm leading-relaxed">
-                Available as a C++/Python Shared Library for custom integration.
+                Deliver Quality of Results (QoR) across Timing, Power, and Area that match leading commercial tools.
               </p>
-              <span style={{ color: CUHK_PURPLE }} className="inline-flex items-center gap-2 text-sm font-bold group-hover:gap-3 transition-all">
-                API Docs <ChevronRight size={16} />
-              </span>
             </div>
           </div>
 
@@ -221,7 +367,7 @@ const App = () => {
             
             <div className="relative z-10">
               <div style={{ backgroundColor: `${CUHK_PURPLE}10`, borderColor: `${CUHK_PURPLE}20`, color: CUHK_PURPLE }} className="inline-flex items-center gap-2 px-3 py-1 rounded-full border text-[10px] font-black tracking-widest uppercase mb-8">
-                <Award size={14} /> Academic & Industrial Excellence
+                <Award size={14} /> Recognition
               </div>
               
               <h2 className="text-4xl font-black text-slate-900 mb-12 tracking-tight">Awards</h2>
@@ -466,13 +612,14 @@ const App = () => {
 
   return (
     <div className="min-h-screen font-sans text-slate-900 bg-slate-50 flex flex-col w-full selection:bg-purple-100">
-      <Nav />
+      {Nav()}
+      {isDemoModalOpen && DemoModal()}
       <main className="w-full flex-grow">
-        {currentPage === 'home' && <HomeView />}
-        {currentPage === 'features' && <FeaturesPageView />}
-        {currentPage === 'docs' && <DocsView />}
+        {currentPage === 'home' && HomeView()}
+        {currentPage === 'features' && FeaturesPageView()}
+        {currentPage === 'docs' && DocsView()}
       </main>
-      <footer className="w-full bg-white text-slate-400 py-16 border-t border-slate-200">
+      <footer className="w-full bg-white text-slate-400 py-16 border-t border-slate-200 mt-auto">
         <div className="max-w-[1440px] mx-auto px-6 flex flex-col items-center gap-6">
           <span className="text-xl font-black tracking-tighter text-slate-900 uppercase">CU<span style={{ color: CUHK_GOLD }}>EDA</span></span>
           <p className="text-xs font-bold uppercase tracking-[0.3em]">© 2025 CUEDA Limited</p>
