@@ -69,29 +69,37 @@ const App = () => {
     setIsSubmitting(true);
     
     try {
-      // Netlify specific POST request
-      // Note: action is explicitly "/" to match the Netlify expected endpoint
-      await fetch("/", {
+      const CLOUDFLARE_WORKER_URL = "https://cueda-form-handler.bunstelle.workers.dev/submit";
+
+      const response = await fetch(CLOUDFLARE_WORKER_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: encode({ 
-          "form-name": "contact", 
-          ...formData 
+        headers: { 
+          "Content-Type": "application/json" 
+        },
+        body: JSON.stringify({
+          ...formData,
+          submittedAt: new Date().toISOString(),
+          source: window.location.hostname
         })
       });
 
-      setIsSubmitting(false);
-      setIsSubmitted(true);
-      
-      // Reset form after success
-      setTimeout(() => {
-        setIsDemoModalOpen(false);
-        setIsSubmitted(false);
-        setFormData({ name: '', email: '', affiliation: '', 'bot-field': '' });
-      }, 3000);
+      if (response.ok) {
+        setIsSubmitting(false);
+        setIsSubmitted(true);
+        setTimeout(() => {
+          setIsDemoModalOpen(false);
+          setIsSubmitted(false);
+          setFormData({ name: '', email: '', affiliation: '' });
+        }, 3000);
+      } else {
+        const errorData = await response.text();
+        console.error("Worker Error:", errorData);
+        throw new Error("Worker responded with an error");
+      }
     } catch (error) {
-      console.error("Form submission error:", error);
+      console.error("Submission error:", error);
       setIsSubmitting(false);
+      // Fallback: log to console or show error state if needed
     }
   };
 
@@ -145,6 +153,13 @@ const App = () => {
             Request Demo
           </button>
         </div>
+        <form method="POST" action="/api/submit">
+          <input type="text" name="name" pattern="[A-Za-z]+" required />
+          <input type="email" name="email" required />
+          <input type="text" name="affiliation" pattern="[A-Za-z]+" required />
+
+          <button type="submit">Submit</button>
+        </form>
       </div>
     </nav>
   );
@@ -622,7 +637,7 @@ const App = () => {
       <footer className="w-full bg-white text-slate-400 py-16 border-t border-slate-200 mt-auto">
         <div className="max-w-[1440px] mx-auto px-6 flex flex-col items-center gap-6">
           <span className="text-xl font-black tracking-tighter text-slate-900 uppercase">CU<span style={{ color: CUHK_GOLD }}>EDA</span></span>
-          <p className="text-xs font-bold uppercase tracking-[0.3em]">© 2025 CUEDA Limited</p>
+          <p className="text-xs font-bold uppercase tracking-[0.3em]">© 2026 CUEDA Limited</p>
         </div>
       </footer>
     </div>
