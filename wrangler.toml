@@ -1,6 +1,6 @@
 name = "cueda-worker"
 compatibility_date = "2024-01-01"
-workers_dev = false
+pages_build_output_dir = "dist"
 
 [[d1_databases]]
 binding = "CUEDA_DEMO" # This MUST match the 'env.DB' variable in your code
