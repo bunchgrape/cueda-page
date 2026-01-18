@@ -73,13 +73,15 @@ const App = () => {
 
       const response = await fetch(CLOUDFLARE_WORKER_URL, {
         method: "POST",
+        mode: 'cors',
         headers: { 
           "Content-Type": "application/json" 
         },
         body: JSON.stringify({
-          ...formData,
-          submittedAt: new Date().toISOString(),
-          source: window.location.hostname
+          name: formData.name,
+          email: formData.email,
+          affiliation: formData.affiliation
+          // Note: created_at and updated_at are handled by D1 defaults
         })
       });
 
@@ -92,14 +94,12 @@ const App = () => {
           setFormData({ name: '', email: '', affiliation: '' });
         }, 3000);
       } else {
-        const errorData = await response.text();
-        console.error("Worker Error:", errorData);
-        throw new Error("Worker responded with an error");
+        const errorText = await response.text();
+        throw new Error(`Worker Error: ${response.status} - ${errorText}`);
       }
     } catch (error) {
-      console.error("Submission error:", error);
+      console.error("Submission Error:", error);
       setIsSubmitting(false);
-      // Fallback: log to console or show error state if needed
     }
   };
 
@@ -555,8 +555,7 @@ const App = () => {
     <div className="min-h-screen font-sans text-slate-900 bg-slate-50 flex flex-col w-full selection:bg-purple-100">
       {Nav()}
 
-      {/* Simple Test Form Section */}
-      <div className="bg-yellow-50 border-b border-yellow-100 py-4 flex justify-center">
+      {/* <div className="bg-yellow-50 border-b border-yellow-100 py-4 flex justify-center">
         <form onSubmit={handleDemoSubmit} className="flex gap-4 items-center">
            <span className="text-xs font-bold text-yellow-700 uppercase">Test Form:</span>
            <input 
@@ -592,7 +591,7 @@ const App = () => {
              {isSubmitting ? "..." : "Submit"}
            </button>
         </form>
-      </div>
+      </div> */}
 
 
       {isDemoModalOpen && DemoModal()}
