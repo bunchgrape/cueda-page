@@ -69,7 +69,8 @@ const App = () => {
     setIsSubmitting(true);
     
     try {
-      const CLOUDFLARE_WORKER_URL = "https://cueda-form-handler.bunstelle.workers.dev";
+      // const CLOUDFLARE_WORKER_URL = "https://cueda-form-handler.bunstelle.workers.dev";
+      const CLOUDFLARE_WORKER_URL = import.meta.env.VITE_WORKER_URL;
 
       const response = await fetch(CLOUDFLARE_WORKER_URL, {
         method: "POST",
