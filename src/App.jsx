@@ -69,7 +69,7 @@ const App = () => {
     setIsSubmitting(true);
     
     try {
-      const CLOUDFLARE_WORKER_URL = "https://cueda-form-handler.bunstelle.workers.dev/submit";
+      const CLOUDFLARE_WORKER_URL = "https://cueda-form-handler.bunstelle.workers.dev";
 
       const response = await fetch(CLOUDFLARE_WORKER_URL, {
         method: "POST",
@@ -153,13 +153,6 @@ const App = () => {
             Request Demo
           </button>
         </div>
-        <form method="POST" action="/api/submit">
-          <input type="text" name="name" pattern="[A-Za-z]+" required />
-          <input type="email" name="email" required />
-          <input type="text" name="affiliation" pattern="[A-Za-z]+" required />
-
-          <button type="submit">Submit</button>
-        </form>
       </div>
     </nav>
   );
@@ -167,103 +160,36 @@ const App = () => {
   const DemoModal = () => (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={() => setIsDemoModalOpen(false)}></div>
-      <div className="relative bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
-        <div className="p-8">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">Request <span style={{ color: CUHK_GOLD }}>Demo</span></h2>
-            <button onClick={() => setIsDemoModalOpen(false)} className="p-2 hover:bg-slate-100 rounded-full transition-colors">
-              <X size={20} />
-            </button>
-          </div>
-
-          {isSubmitted ? (
-            <div className="py-12 text-center space-y-4 animate-in slide-in-from-bottom-4 duration-500">
-              <div className="flex justify-center text-emerald-500">
-                <CheckCircle2 size={64} />
-              </div>
-              <h3 className="text-xl font-bold text-slate-900">Request Sent!</h3>
-              <p className="text-slate-500">We will contact you shortly at {formData.email}.</p>
-            </div>
-          ) : (
-            /* Updated form for Netlify with Honeypot and Action */
-            <form 
-              name="contact" 
-              method="POST" 
-              action="/"
-              data-netlify="true" 
-              data-netlify-honeypot="bot-field"
-              onSubmit={handleDemoSubmit} 
-              className="space-y-4"
-            >
-              {/* Required for Netlify JS integration */}
-              <input type="hidden" name="form-name" value="contact" />
-              
-              {/* Honeypot field for spam prevention */}
-              <p className="hidden">
-                <label>Don't fill this out if you're human: 
-                  <input name="bot-field" onChange={(e) => setFormData(prev => ({...prev, 'bot-field': e.target.value}))} />
-                </label>
-              </p>
-              
-              <div className="space-y-1">
-                <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Name</label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-                  <input 
-                    required
-                    name="name"
-                    type="text"
-                    placeholder="Name"
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 pl-10 pr-4 outline-none focus:ring-2 focus:ring-purple-100 focus:border-purple-300 transition-all"
-                    value={formData.name}
-                    onChange={(e) => setFormData(prev => ({...prev, name: e.target.value}))}
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Email Address</label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-                  <input 
-                    required
-                    name="email"
-                    type="email"
-                    placeholder="name@affiliation.com"
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 pl-10 pr-4 outline-none focus:ring-2 focus:ring-purple-100 focus:border-purple-300 transition-all"
-                    value={formData.email}
-                    onChange={(e) => setFormData(prev => ({...prev, email: e.target.value}))}
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Affiliation</label>
-                <div className="relative">
-                  <Building className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-                  <input 
-                    required
-                    name="affiliation"
-                    type="text"
-                    placeholder="Affiliation"
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 pl-10 pr-4 outline-none focus:ring-2 focus:ring-purple-100 focus:border-purple-300 transition-all"
-                    value={formData.affiliation}
-                    onChange={(e) => setFormData(prev => ({...prev, affiliation: e.target.value}))}
-                  />
-                </div>
-              </div>
-
-              <button 
-                disabled={isSubmitting}
-                type="submit"
-                style={{ backgroundColor: CUHK_PURPLE }}
-                className="w-full text-white font-bold py-4 rounded-xl mt-4 shadow-lg shadow-purple-900/20 hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
-              >
-                {isSubmitting ? <Loader2 className="animate-spin" size={20} /> : "Submit Request"}
-              </button>
-            </form>
-          )}
+      <div className="relative bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden p-8">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-black text-slate-900 uppercase">Request <span style={{ color: CUHK_GOLD }}>Demo</span></h2>
+          <button onClick={() => setIsDemoModalOpen(false)} className="p-2 hover:bg-slate-100 rounded-full transition-colors"><X size={20} /></button>
         </div>
+
+        {isSubmitted ? (
+          <div className="py-12 text-center space-y-4">
+            <div className="flex justify-center text-emerald-500"><CheckCircle2 size={64} /></div>
+            <h3 className="text-xl font-bold">Request Sent!</h3>
+          </div>
+        ) : (
+          <form onSubmit={handleDemoSubmit} className="space-y-4">
+            <div className="space-y-1">
+              <label className="text-[10px] font-black uppercase text-slate-400 ml-1">Full Name</label>
+              <input required type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 outline-none" value={formData.name} onChange={(e) => setFormData(prev => ({...prev, name: e.target.value}))} />
+            </div>
+            <div className="space-y-1">
+              <label className="text-[10px] font-black uppercase text-slate-400 ml-1">Email</label>
+              <input required type="email" className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 outline-none" value={formData.email} onChange={(e) => setFormData(prev => ({...prev, email: e.target.value}))} />
+            </div>
+            <div className="space-y-1">
+              <label className="text-[10px] font-black uppercase text-slate-400 ml-1">Affiliation</label>
+              <input required type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 outline-none" value={formData.affiliation} onChange={(e) => setFormData(prev => ({...prev, affiliation: e.target.value}))} />
+            </div>
+            <button disabled={isSubmitting} type="submit" style={{ backgroundColor: CUHK_PURPLE }} className="w-full text-white font-bold py-4 rounded-xl mt-4 flex items-center justify-center gap-2">
+              {isSubmitting ? <Loader2 className="animate-spin" size={20} /> : "Submit Request"}
+            </button>
+          </form>
+        )}
       </div>
     </div>
   );
@@ -628,6 +554,47 @@ const App = () => {
   return (
     <div className="min-h-screen font-sans text-slate-900 bg-slate-50 flex flex-col w-full selection:bg-purple-100">
       {Nav()}
+
+      {/* Simple Test Form Section */}
+      <div className="bg-yellow-50 border-b border-yellow-100 py-4 flex justify-center">
+        <form onSubmit={handleDemoSubmit} className="flex gap-4 items-center">
+           <span className="text-xs font-bold text-yellow-700 uppercase">Test Form:</span>
+           <input 
+             type="text" 
+             name="name" 
+             placeholder="Name"
+             pattern="[A-Za-z ]+" 
+             required 
+             className="px-2 py-1 border rounded text-sm"
+             value={formData.name}
+             onChange={(e) => setFormData(prev => ({...prev, name: e.target.value}))}
+           />
+           <input 
+             type="email" 
+             name="email" 
+             placeholder="Email"
+             required 
+             className="px-2 py-1 border rounded text-sm"
+             value={formData.email}
+             onChange={(e) => setFormData(prev => ({...prev, email: e.target.value}))}
+           />
+           <input 
+             type="text" 
+             name="affiliation" 
+             placeholder="Affiliation"
+             pattern="[A-Za-z ]+" 
+             required 
+             className="px-2 py-1 border rounded text-sm"
+             value={formData.affiliation}
+             onChange={(e) => setFormData(prev => ({...prev, affiliation: e.target.value}))}
+           />
+           <button type="submit" className="bg-slate-800 text-white px-4 py-1 rounded text-sm font-bold">
+             {isSubmitting ? "..." : "Submit"}
+           </button>
+        </form>
+      </div>
+
+
       {isDemoModalOpen && DemoModal()}
       <main className="w-full flex-grow">
         {currentPage === 'home' && HomeView()}
