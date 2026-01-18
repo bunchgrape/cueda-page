@@ -1,0 +1,9 @@
+name = "cueda-worker"
+# main = "src/worker.js" # This should point to your Worker file
+compatibility_date = "2024-01-01"
+workers_dev = false
+
+[[d1_databases]]
+binding = "CUEDA_DEMO" # This MUST match the 'env.DB' variable in your code
+database_name = "demo"
+database_id = "b2050e90-d2ee-43d6-bd69-b2c8b3d21735"
