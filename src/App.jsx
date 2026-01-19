@@ -27,6 +27,7 @@ import {
   CheckCircle2,
   Loader2
 } from 'lucide-react';
+import { Turnstile } from "@marsidev/react-turnstile";
 
 /**
  * CUHK Color Palette Constants
@@ -44,6 +45,9 @@ const App = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  // Turnstile State
+  const [turnstileToken, setTurnstileToken] = useState(null);
+
   useEffect(() => {
     window.scrollTo(0, 0);
     setIsSidebarOpen(false);
@@ -57,21 +61,27 @@ const App = () => {
     }
   }, [isSidebarOpen, isDemoModalOpen]);
 
-  // Helper to encode form data for Netlify
-  const encode = (data) => {
-    return Object.keys(data)
-      .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
-      .join("&");
-  }
+  const handleSuccess = (token) => {
+    setTurnstileToken(token);
+  };
+
+  const handleExpire = () => {
+    setTurnstileToken(null);
+  };
 
   const handleDemoSubmit = async (e) => {
     e.preventDefault();
+    if (!turnstileToken) {
+      alert("Please complete the Cloudflare challenge.");
+      return;
+    }
+
     setIsSubmitting(true);
     
     try {
-      // const CLOUDFLARE_WORKER_URL = "https://cueda-form-handler.bunstelle.workers.dev";
+      const CLOUDFLARE_WORKER_URL = "https://cueda-form-handler.bunstelle.workers.dev";
       // const CLOUDFLARE_WORKER_URL = import.meta.env.VITE_WORKER_URL;
-      const CLOUDFLARE_WORKER_URL = "/api/submit";
+      // const CLOUDFLARE_WORKER_URL = "/api/submit";
 
       const response = await fetch(CLOUDFLARE_WORKER_URL, {
         method: "POST",
@@ -82,7 +92,8 @@ const App = () => {
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
-          affiliation: formData.affiliation
+          affiliation: formData.affiliation,
+          turnstileToken: turnstileToken,   // 🔴 IMPORTANT
           // Note: created_at and updated_at are handled by D1 defaults
         })
       });
@@ -94,6 +105,7 @@ const App = () => {
           setIsDemoModalOpen(false);
           setIsSubmitted(false);
           setFormData({ name: '', email: '', affiliation: '' });
+          setTurnstileToken(null);
         }, 3000);
       } else {
         const errorText = await response.text();
@@ -187,7 +199,25 @@ const App = () => {
               <label className="text-[10px] font-black uppercase text-slate-400 ml-1">Affiliation</label>
               <input required type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 outline-none" value={formData.affiliation} onChange={(e) => setFormData(prev => ({...prev, affiliation: e.target.value}))} />
             </div>
-            <button disabled={isSubmitting} type="submit" style={{ backgroundColor: CUHK_PURPLE }} className="w-full text-white font-bold py-4 rounded-xl mt-4 flex items-center justify-center gap-2">
+
+            <div className="flex justify-center py-2 min-h-[70px] bg-white-50 overflow-hidden">
+                <Turnstile 
+                  // siteKey="1x00000000000000000000AA" 
+                  siteKey="0x4AAAAAACNUN2MeRUMtY3r0" 
+                  onSuccess={handleSuccess} 
+                  onExpire={handleExpire}
+                  options={{ theme: 'light' }}
+                />
+              </div>
+
+            <button 
+              disabled={isSubmitting || !turnstileToken} 
+              type="submit" 
+              style={{ 
+                backgroundColor: (turnstileToken) ? CUHK_PURPLE : '#f1f5f9',
+                color: (turnstileToken) ? 'white' : '#94a3b8'
+              }}
+              className="w-full text-white font-bold py-4 rounded-xl mt-4 flex items-center justify-center gap-2">
               {isSubmitting ? <Loader2 className="animate-spin" size={20} /> : "Submit Request"}
             </button>
           </form>
@@ -290,8 +320,8 @@ const App = () => {
               {/* <div style={{ backgroundColor: `${CUHK_PURPLE}10`, color: CUHK_PURPLE }} className="p-3 rounded-xl w-fit mb-6 group-hover:scale-110 transition-transform duration-300">
                 <Layers size={24} strokeWidth={2} />
               </div> */}
-              <div class="text-cuhk-gold mb-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke={CUHK_PURPLE} stroke-width="2">
+              <div style={{ backgroundColor: `${CUHK_PURPLE}10`, color: CUHK_PURPLE }} className="p-2 rounded-xl w-fit mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 25 25" stroke={CUHK_PURPLE} stroke-width="2">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5v2m6-2v2"/>
                       <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke={CUHK_PURPLE}/>
                   </svg>
@@ -556,45 +586,6 @@ const App = () => {
   return (
     <div className="min-h-screen font-sans text-slate-900 bg-slate-50 flex flex-col w-full selection:bg-purple-100">
       {Nav()}
-
-      {/* <div className="bg-yellow-50 border-b border-yellow-100 py-4 flex justify-center">
-        <form onSubmit={handleDemoSubmit} className="flex gap-4 items-center">
-           <span className="text-xs font-bold text-yellow-700 uppercase">Test Form:</span>
-           <input 
-             type="text" 
-             name="name" 
-             placeholder="Name"
-             pattern="[A-Za-z ]+" 
-             required 
-             className="px-2 py-1 border rounded text-sm"
-             value={formData.name}
-             onChange={(e) => setFormData(prev => ({...prev, name: e.target.value}))}
-           />
-           <input 
-             type="email" 
-             name="email" 
-             placeholder="Email"
-             required 
-             className="px-2 py-1 border rounded text-sm"
-             value={formData.email}
-             onChange={(e) => setFormData(prev => ({...prev, email: e.target.value}))}
-           />
-           <input 
-             type="text" 
-             name="affiliation" 
-             placeholder="Affiliation"
-             pattern="[A-Za-z ]+" 
-             required 
-             className="px-2 py-1 border rounded text-sm"
-             value={formData.affiliation}
-             onChange={(e) => setFormData(prev => ({...prev, affiliation: e.target.value}))}
-           />
-           <button type="submit" className="bg-slate-800 text-white px-4 py-1 rounded text-sm font-bold">
-             {isSubmitting ? "..." : "Submit"}
-           </button>
-        </form>
-      </div> */}
-
 
       {isDemoModalOpen && DemoModal()}
       <main className="w-full flex-grow">
